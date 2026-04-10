@@ -5,7 +5,7 @@ import mongoose from "mongoose"
 import dotenv, { config } from "dotenv"
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { createServer } from "http";  // Node's built-in HTTP module
+import { createServer } from "http";  //Nodes built in HTTP module
 import { initSocket } from "./socket/index.js"; //socket.io setup
 import authRoutes from "./routes/authRoutes.js";
 
