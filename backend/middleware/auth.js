@@ -1,4 +1,4 @@
-/* Checks the JWT token sent by the user, verifies if the token is valid or not, If valid -> it extracts user info(id + role), It stores that info in req.user so protected routes can use it., Then it allows the request to continue */
+/* Checks the JWT token sent by the user, verifies if the token is valid or not, If valid -> it extracts user info(id + role), It stores that info in req.user so protected routes can use it. Then it allows the request to continue */
 
 import { verifyAccessToken } from "../config/jwt.js";
 
@@ -6,7 +6,7 @@ import { verifyAccessToken } from "../config/jwt.js";
 export const protect = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer")) {
-        return res.status(401).json({ message: "Authentication required. Please log in to continue." });
+        return res.status(401).json({ message: "Please log in to continue." });
     }
 
     const token = authHeader.split(" ")[1];
@@ -17,14 +17,14 @@ export const protect = (req, res, next) => {
         next();
     } catch (error) {
         if (error.name === "TokenExpiredError") {
-            return res.status(401).json({ message: "Your session has expired. Please log in again." });
+            return res.status(401).json({ message: "Session expired. Please log in again." });
         }
-        return res.status(401).json({ message: "Invalid or malformed token. Please log in again." });
+        return res.status(401).json({ message: "Please log in again." });
     }
 };
 
 
-//Role-based access control middleware (authorization / roles)
+//Role based access control 
 export const restrictTo = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {

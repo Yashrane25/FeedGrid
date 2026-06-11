@@ -5,23 +5,52 @@ const instance = axios.create({
     withCredentials: true,
 });
 
+// instance.interceptors.response.use(
+//     (response) => response,
+//     async (error) => {
+//         const originalRequest = error.config;
+
+//         if (error.response?.status === 401 && !originalRequest._retry) {
+//             originalRequest._retry = true;
+//             try {
+//                 const res = await instance.post("/auth/refresh");
+//                 const newToken = res.data.accessToken;
+
+//                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
+//                 return instance(originalRequest);
+//             } catch {
+//                 window.location.href = "/login";
+//             }
+//         }
+//         return Promise.reject(error);
+//     }
+// );
+
+
 instance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (
+            error.response?.status === 401 &&
+            !originalRequest._retry &&
+            originalRequest.url !== "/auth/refresh"
+        ) {
             originalRequest._retry = true;
+
             try {
                 const res = await instance.post("/auth/refresh");
                 const newToken = res.data.accessToken;
 
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
                 return instance(originalRequest);
             } catch {
                 window.location.href = "/login";
             }
         }
+
         return Promise.reject(error);
     }
 );

@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import { generateTokens, verifyRefreshToken } from "../config/jwt.js";
 
-/* REGISTER  */
+/* REGISTER */
 export const register = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
@@ -30,6 +30,7 @@ export const register = async (req, res) => {
         });
     }
     catch (error) {
+        console.error("REGISTER ERROR:", error);
         res.status(500).json({ message: "Something went wrong. Please try again later." });
     }
 }

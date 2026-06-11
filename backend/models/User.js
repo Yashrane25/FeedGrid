@@ -44,14 +44,15 @@ const userSchema = new mongoose.Schema({
 
 
 //This runs AUTOMATICALLY before every .save() call. If the password was changed (or is new), hash it before storing.
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
     if (!this.isModified('password')) {
-        return next();
+        // return next();
+        return;
     }
 
     //bcrypt.hash(password, saltRounds);
     this.password = await bcrypt.hash(this.password, 12);
-    next();
+    // next();
 });
 
 

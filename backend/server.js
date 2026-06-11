@@ -1,13 +1,12 @@
-/* Backend entry point, starts everything */
-
 import express from "express"
 import mongoose from "mongoose"
 import dotenv, { config } from "dotenv"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { createServer } from "http";  //Nodes built in HTTP module
-import { initSocket } from "./socket/index.js"; //socket.io setup
+// import { initSocket } from "./socket/index.js"; //socket.io setup
 import authRoutes from "./routes/authRoutes.js";
+import restaurantRoutes from "./routes/restaurantRoutes.js";
 
 dotenv.config();
 
@@ -24,8 +23,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
 //Routes 
 app.use("/api/auth", authRoutes);
+app.use("/api/restaurants", restaurantRoutes);
 
 
 //DB Connection
@@ -36,6 +37,6 @@ mongoose.connect(process.env.MONGO_URI)
 
 //HTTP Server + Socket.io
 const httpServer = createServer(app);
-initSocket(httpServer);
+// initSocket(httpServer);
 
 httpServer.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
