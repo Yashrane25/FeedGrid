@@ -1,0 +1,48 @@
+/* Error Message Box */
+.stripe-error-box {
+  color: #c00;
+  font-size: 14px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #fff5f5;
+  border-radius: 8px;
+  border: 1px solid #fcc;
+}
+
+/* Button Container */
+.checkout-btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Back Button */
+.back-btn {
+  flex: 1;
+  padding: 13px;
+  background: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* Pay Button */
+.pay-btn {
+  flex: 2;
+  padding: 13px;
+  background: #e23744;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  opacity: 1;
+}
+
+/* Loading State */
+.pay-btn-loading {
+  opacity: 0.7;
+}

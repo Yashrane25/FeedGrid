@@ -4,9 +4,10 @@ import dotenv, { config } from "dotenv"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { createServer } from "http";  //Nodes built in HTTP module
-// import { initSocket } from "./socket/index.js"; //socket.io setup
+import { initSocket } from "./socket/index.js"; //socket.io setup
 import authRoutes from "./routes/authRoutes.js";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 
@@ -19,24 +20,33 @@ app.use(cors({
     credentials: true,
 }));
 
+
+app.use(cookieParser());
+
+//raw body only for webhook route
+app.use("/api/orders/webhook", express.raw({ type: "application/json" }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 
 
 //Routes 
 app.use("/api/auth", authRoutes);
 app.use("/api/restaurants", restaurantRoutes);
-
-
-//DB Connection
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB error", err));
+app.use("/api/orders", orderRoutes);
 
 
 //HTTP Server + Socket.io
 const httpServer = createServer(app);
-// initSocket(httpServer);
+initSocket(httpServer);
 
-httpServer.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
+//DB + Server start
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        console.log("MongoDB connected");
+
+        httpServer.listen(PORT, () =>
+            console.log(`Server running on ${PORT}`)
+        );
+    })
+    .catch((err) => console.error("MongoDB error", err));
