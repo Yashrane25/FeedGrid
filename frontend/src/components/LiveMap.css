@@ -1,0 +1,46 @@
+/* Main map wrapper */
+.live-map-container {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+/* Leaflet map */
+.live-map {
+  height: 100%;
+  width: 100%;
+}
+
+/* Agent icon */
+.agent-icon {
+  font-size: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+/* Restaurant icon */
+.restaurant-icon {
+  font-size: 26px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Customer icon */
+.customer-icon {
+  width: 20px;
+  height: 20px;
+  background: #e23744;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(226, 55, 68, 0.5);
+}
+
+/* Delivery scooter bounce animation */
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-6px);
+  }
+}

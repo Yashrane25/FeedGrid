@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express"
 import mongoose from "mongoose"
-import dotenv, { config } from "dotenv"
+// import dotenv, { config } from "dotenv"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { createServer } from "http";  //Nodes built in HTTP module

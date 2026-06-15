@@ -3,7 +3,14 @@ import Order from "../models/Order.js";
 import Restaurant from "../models/Restaurant.js";
 import { getIO } from "../socket/index.js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+let stripe;
+
+const getStripe = () => {
+    if (!stripe) {
+        stripe = new stripe(process.env.STRIPE_SECRET_KEY);
+    }
+    return stripe;
+}
 
 //Create Stripe PaymentIntent
 export const createPaymentIntent = async (req, res) => {
@@ -50,7 +57,7 @@ export const createPaymentIntent = async (req, res) => {
         //Create Stripe PaymentIntent
         //amount must be in smallest currency unit (paise for INR)
         //So ₹100 = 10000 paise
-        const paymentIntent = await stripe.paymentIntents.create({
+        const paymentIntent = await getStripe().paymentIntents.create({
             amount: totalAmount * 100,  //Convert rupees to paise
             currency: "inr",
             //metadata is stored with the payment in Stripe's dashboard, We use it in the webhook to know which order this payment is for
@@ -92,7 +99,7 @@ export const stripeWebhook = async (req, res) => {
     let event;
     try {
         //stripe.webhooks.constructEvent verifies the signature using our webhook secret
-        event = stripe.webhooks.constructEvent(
+        event = getStripe().webhooks.constructEvent(
             req.body,
             sig,
             process.env.STRIPE_WEBHOOK_SECRET
@@ -205,7 +212,9 @@ export const updateOrderStatus = async (req, res) => {
     try {
         const { status, estimatedDeliveryTime } = req.body;
         const order = await Order.findById(req.params.id);
-        if (!order) return res.status(404).json({ message: "Order not found." });
+        if (!order) {
+            return res.status(404).json({ message: "Order not found." });
+        }
 
         const validTransitions = {
             pending: ["confirmed", "cancelled"],

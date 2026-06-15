@@ -1,0 +1,89 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-logo {
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 800;
+  color: #e23744;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cart-link {
+  text-decoration: none;
+  position: relative;
+}
+
+.cart-icon {
+  font-size: 22px;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #e23744;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-greeting {
+  font-size: 13px;
+  color: #888;
+}
+
+.logout-btn {
+  padding: 6px 16px;
+  border-radius: 99px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.signup-btn {
+  text-decoration: none;
+  padding: 8px 20px;
+  background: #e23744;
+  color: white;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+}

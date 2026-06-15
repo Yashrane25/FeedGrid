@@ -1,0 +1,348 @@
+.track-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.track-loading,
+.track-not-found {
+  padding: 40px;
+  text-align: center;
+}
+
+.track-loading-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.track-header {
+  margin-bottom: 28px;
+}
+
+.track-order-id {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.track-title {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.track-restaurant-name {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.track-eta-banner {
+  background: linear-gradient(135deg, #e23744, #c0392b);
+  color: white;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.track-eta-label {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.track-eta-value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.track-eta-icon {
+  font-size: 40px;
+}
+
+.track-steps-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.track-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+}
+
+.track-step-connector {
+  position: absolute;
+  left: 19px;
+  top: 42px;
+  width: 2px;
+  height: 40px;
+  transition: background 0.4s ease;
+}
+
+.track-step-connector--done {
+  background: #388e3c;
+}
+
+.track-step-connector--pending {
+  background: #e0e0e0;
+}
+
+.track-step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.4s ease;
+}
+
+.track-step-icon--done {
+  background: #e8f5e9;
+  border: 2px solid #388e3c;
+}
+
+.track-step-icon--current {
+  background: #fff5f5;
+  border: 2px solid #e23744;
+  animation: pulse-border 1.5s ease-in-out infinite;
+}
+
+.track-step-icon--pending {
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+}
+
+.track-step-body {
+  padding-bottom: 24px;
+  transition: opacity 0.4s ease;
+}
+
+.track-step-body--pending {
+  opacity: 0.4;
+}
+
+.track-step-body--active {
+  opacity: 1;
+}
+
+.track-step-label {
+  font-size: 15px;
+}
+
+.track-step-label--done {
+  font-weight: 600;
+  color: #388e3c;
+}
+
+.track-step-label--current {
+  font-weight: 700;
+  color: #e23744;
+}
+
+.track-step-label--pending {
+  font-weight: 600;
+  color: #333;
+}
+
+.track-step-desc {
+  font-size: 13px;
+  color: #777;
+  margin-top: 2px;
+}
+
+.track-step-timestamp {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 3px;
+}
+
+.track-cancelled-card {
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.track-cancelled-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.track-cancelled-title {
+  margin: 0 0 8px;
+  color: #c62828;
+}
+
+.track-cancelled-desc {
+  margin: 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.track-map-placeholder {
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  height: 280px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: #888;
+}
+
+.track-map-agent-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.track-map-agent-coords {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.track-map-phase-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #bbb;
+}
+
+.track-map-waiting-icon {
+  font-size: 32px;
+}
+
+.track-map-waiting-text {
+  margin: 0;
+  font-size: 14px;
+}
+
+.track-summary-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.track-summary-title {
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+
+.track-summary-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.track-summary-divider {
+  border-top: 1px dashed #e0e0e0;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.track-summary-fee-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.track-summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 16px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.track-delivery-address {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+@keyframes pulse-border {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(226, 55, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(226, 55, 68, 0);
+  }
+}
+
+/* Live Map Section */
+.live-map-section {
+  margin-bottom: 24px;
+}
+
+.live-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.live-map-title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.live-status {
+  font-size: 12px;
+  color: #388e3c;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.live-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #388e3c;
+  display: inline-block;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.last-updated {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.4);
+  }
+}

@@ -1,5 +1,4 @@
 //When we upload an image, Cloudinary stores it and returns a permanent URL. We store that URL in MongoDB. DB never stores the actual image binary.
-
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import multer from "multer";
