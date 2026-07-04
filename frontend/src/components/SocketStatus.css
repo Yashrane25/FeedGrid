@@ -1,0 +1,38 @@
+.socket-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: #888;
+  padding: 2px 8px;
+}
+
+.socket-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.socket-status-dot--connected {
+  background: #4caf50;
+  animation: socket-pulse 2s infinite;
+}
+
+.socket-status-dot--disconnected {
+  background: #bbb;
+}
+
+.socket-status-text {
+  font-weight: 500;
+}
+
+@keyframes socket-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

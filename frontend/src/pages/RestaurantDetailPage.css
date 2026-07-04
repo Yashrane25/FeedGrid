@@ -1,0 +1,158 @@
+.restaurant-detail-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.restaurant-detail-page__back-button {
+  background: none;
+  border: none;
+  color: #e85d04;
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.restaurant-detail-page__hero-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.restaurant-detail-page__hero-placeholder {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+}
+
+.restaurant-detail-page__info-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.restaurant-detail-page__name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.restaurant-detail-page__name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.restaurant-detail-page__status-badge {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.restaurant-detail-page__status-badge--open {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.restaurant-detail-page__status-badge--closed {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.restaurant-detail-page__cuisine {
+  color: #777;
+  font-size: 0.95rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.restaurant-detail-page__description {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.restaurant-detail-page__meta-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.restaurant-detail-page__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.restaurant-detail-page__rating-count {
+  color: #999;
+}
+
+.restaurant-detail-page__tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.restaurant-detail-page__tab {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  color: #555;
+}
+
+.restaurant-detail-page__tab--active {
+  border: 1px solid #e85d04;
+  background: #e85d04;
+  color: white;
+  font-weight: 600;
+}
+
+.restaurant-detail-page__menu-section {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+
+.restaurant-detail-page__menu-title {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+  color: #333;
+}
+
+.restaurant-detail-page__empty-menu {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+}
+
+.restaurant-detail-page__empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}

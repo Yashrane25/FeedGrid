@@ -1,0 +1,129 @@
+.browse-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.browse-page__header {
+  margin-bottom: 1.5rem;
+}
+
+.browse-page__title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.25rem;
+}
+
+.browse-page__subtitle {
+  color: #777;
+  font-size: 0.95rem;
+}
+
+.browse-page__filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.browse-page__search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.browse-page__city-input {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  width: 140px;
+}
+
+.browse-page__select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.browse-page__reset-button {
+  padding: 0.6rem 1rem;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.browse-page__results-info {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 1rem;
+}
+
+.browse-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.browse-page__empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #777;
+}
+
+.browse-page__empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.browse-page__clear-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: #e85d04;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.browse-page__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.browse-page__page-button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.browse-page__page-button--active {
+  border: 1px solid #e85d04;
+  background: #e85d04;
+  color: white;
+}
+
+.browse-page__page-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,239 @@
+.agent-dashboard {
+  max-width: 700px;
+}
+
+.agent-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.agent-dashboard__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.agent-dashboard__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.agent-dashboard__live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf50;
+  display: inline-block;
+  animation: agent-pulse 2s infinite;
+}
+
+@keyframes agent-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.agent-dashboard__updated {
+  color: #bbb;
+}
+
+.agent-dashboard__refresh-btn {
+  padding: 0.55rem 1rem;
+  background: #f0f4f8;
+  border: 1px solid #d0dbe8;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.agent-dashboard__refresh-btn:hover {
+  background: #e2eaf3;
+}
+
+/* ── Empty state ── */
+.agent-dashboard__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e8f0;
+  color: #888;
+}
+
+.agent-dashboard__empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.agent-dashboard__empty-title {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.agent-dashboard__empty-sub {
+  font-size: 0.85rem;
+  max-width: 340px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ── Pickup card ── */
+.agent-dashboard__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pickup-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e8f0;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s;
+}
+
+.pickup-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.pickup-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  background: #f0f4f8;
+  border-bottom: 1px solid #e0e8f0;
+}
+
+.pickup-card__order-number {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+.pickup-card__earn {
+  font-weight: 700;
+  color: #2e7d32;
+  font-size: 0.9rem;
+  background: #e8f5e9;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+.pickup-card__restaurant {
+  padding: 1rem 1.25rem 0.6rem;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.pickup-card__restaurant-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.pickup-card__restaurant-address,
+.pickup-card__restaurant-phone {
+  font-size: 0.82rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.pickup-card__delivery {
+  padding: 0.75rem 1.25rem 0.6rem;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.pickup-card__delivery-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.pickup-card__delivery-address {
+  font-size: 0.88rem;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.pickup-card__customer-phone {
+  font-size: 0.82rem;
+  color: #666;
+}
+
+.pickup-card__items {
+  padding: 0.6rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pickup-card__item-tag {
+  background: #f5f5f5;
+  color: #555;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.pickup-card__item-tag--more {
+  background: #e0e0e0;
+  color: #888;
+}
+
+.pickup-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+}
+
+.pickup-card__order-time {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.pickup-card__accept-btn {
+  padding: 0.6rem 1.5rem;
+  width: 36rem;
+  background: #0d3b2e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.pickup-card__accept-btn:hover:not(.pickup-card__accept-btn--loading) {
+  background: #1a5c44;
+  transform: translateY(-1px);
+}
+
+.pickup-card__accept-btn--loading {
+  background: #888;
+  cursor: not-allowed;
+}

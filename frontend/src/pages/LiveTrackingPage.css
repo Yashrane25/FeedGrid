@@ -1,0 +1,294 @@
+.live-tracking {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.live-tracking__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.live-tracking__back-btn {
+  background: none;
+  border: none;
+  color: #e85d04;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0;
+}
+
+.live-tracking__back-btn:hover {
+  text-decoration: underline;
+}
+
+.live-tracking__live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #e85d04;
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.live-tracking__live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: white;
+  animation: live-blink 1s infinite;
+}
+
+@keyframes live-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.live-tracking__eta-banner {
+  background: linear-gradient(135deg, #0d3b2e, #1a5c44);
+  color: white;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.live-tracking__eta-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.live-tracking__eta-content {
+  flex: 1;
+}
+
+.live-tracking__eta-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.live-tracking__eta-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #4caf50;
+  line-height: 1;
+}
+
+.live-tracking__order-info {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.live-tracking__order-number {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: white;
+}
+
+.live-tracking__restaurant-name {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 2px;
+}
+
+.live-tracking__map-section {
+  margin-bottom: 1rem;
+}
+
+.live-tracking__location-status {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+}
+
+.live-tracking__location-active {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.live-tracking__location-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf50;
+  flex-shrink: 0;
+  animation: location-pulse 2s infinite;
+}
+
+@keyframes location-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.live-tracking__location-time {
+  color: #888;
+  font-weight: 400;
+}
+
+.live-tracking__location-waiting {
+  color: #888;
+}
+
+.live-tracking__details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.live-tracking__detail-card {
+  flex: 1;
+}
+
+.live-tracking__detail-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.live-tracking__detail-value {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.live-tracking__detail-sub {
+  font-size: 0.78rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.live-tracking__detail-arrow {
+  font-size: 1.2rem;
+  color: #e85d04;
+  font-weight: 700;
+  flex-shrink: 0;
+  padding: 0 0.25rem;
+}
+
+.live-tracking__geocoding-notice {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  color: #5d4037;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.live-tracking__footer {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.live-tracking__status-link {
+  color: #e85d04;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.live-tracking__status-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Error state ── */
+.live-tracking__error {
+  text-align: center;
+  padding: 3rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.live-tracking__error-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.live-tracking__back-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #e85d04;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.live-tracking__not-active {
+  text-align: center;
+  padding: 3rem 2rem;
+  max-width: 480px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+}
+
+.live-tracking__not-active-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.live-tracking__not-active-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+}
+
+.live-tracking__not-active-sub {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.live-tracking__track-link {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background: #e85d04;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.live-tracking__track-link:hover {
+  opacity: 0.9;
+}

@@ -1,0 +1,137 @@
+.admin-restaurants-page {
+  width: 100%;
+}
+
+.restaurants-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.restaurants-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.restaurants-count {
+  color: #888;
+  font-weight: 400;
+}
+
+.restaurants-filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.restaurants-search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.restaurants-select {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  background: white;
+}
+
+.restaurants-results-info {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.85rem;
+}
+
+.restaurants-table {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+}
+
+.restaurants-table-header {
+  display: grid;
+  grid-template-columns: 1fr 140px 80px 80px 80px 160px;
+  padding: 0.65rem 1rem;
+  background: #f8f8f8;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.restaurants-table-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 80px 80px 80px 160px;
+  padding: 1rem;
+  border-bottom: 1px solid #f8f8f8;
+  align-items: center;
+  font-size: 0.88rem;
+}
+
+.restaurant-name {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.restaurant-meta {
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.owner-info {
+  font-size: 0.82rem;
+  color: #555;
+}
+
+.owner-email {
+  color: #aaa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.73rem;
+  font-weight: 600;
+}
+
+.restaurant-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.approve-btn,
+.active-btn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.approve-btn:disabled,
+.active-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.restaurants-empty {
+  padding: 3rem;
+  text-align: center;
+  color: #888;
+}

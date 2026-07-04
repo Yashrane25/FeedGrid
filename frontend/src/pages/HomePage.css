@@ -1,0 +1,124 @@
+/* .home-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.home-title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.home-subtitle {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.divider {
+  margin: 30px 0;
+}
+
+.section-title {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.success-message {
+  color: green;
+  font-weight: 600;
+}
+
+.error-message {
+  color: red;
+  font-weight: 600;
+} */
+
+.home-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Welcome Banner */
+.home-page__welcome-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.home-page__welcome-link {
+  color: #e85d04;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Hero Section */
+.home-page__hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #fff3e0, #ffecd2);
+  border-radius: 16px;
+  margin-bottom: 2rem;
+}
+
+.home-page__title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.home-page__subtitle {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.home-page__cta-button {
+  display: inline-block;
+  padding: 0.85rem 2.5rem;
+  background: #e85d04;
+  color: white;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Features Grid */
+.home-page__features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.home-page__feature-card {
+  text-align: center;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.home-page__feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.home-page__feature-title {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: #1a1a1a;
+}
+
+.home-page__feature-text {
+  font-size: 0.85rem;
+  color: #777;
+}

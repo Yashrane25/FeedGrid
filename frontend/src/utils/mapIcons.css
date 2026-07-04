@@ -1,0 +1,64 @@
+.map-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-icon__emoji {
+  transform: rotate(45deg);
+  font-size: 16px;
+  display: block;
+  margin-top: 2px;
+  margin-left: 1px;
+}
+
+.map-icon--restaurant {
+  background: #e85d04;
+}
+
+.map-icon--customer {
+  background: #1565c0;
+}
+
+.map-agent {
+  width: 44px;
+  height: 44px;
+  background: #2e7d32;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  position: relative;
+}
+
+.map-agent__ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(46, 125, 50, 0.4);
+  top: -11px;
+  left: -11px;
+  animation: agent-ring 2s infinite;
+}
+
+@keyframes agent-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}

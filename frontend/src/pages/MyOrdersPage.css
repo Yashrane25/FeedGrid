@@ -1,0 +1,114 @@
+.orders-page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.orders-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+}
+
+.order-card {
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: box-shadow 0.2s;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.85rem;
+}
+
+.restaurant-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a1a;
+}
+
+.order-meta {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 2px;
+}
+
+.status-badge {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.items-summary {
+  font-size: 0.88rem;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+.more-items {
+  color: #999;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f5f5f5;
+}
+
+.order-total {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+.view-details-link {
+  font-size: 0.85rem;
+  color: #e85d04;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+}
+
+.empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  margin-bottom: 0.5rem;
+}
+
+.empty-text {
+  margin-bottom: 1.5rem;
+}
+
+.browse-restaurants-btn {
+  display: inline-block;
+  padding: 0.65rem 1.5rem;
+  background: #e85d04;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}

@@ -1,0 +1,98 @@
+.owner-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f8f6;
+}
+
+.owner-layout__sidebar {
+  width: 240px;
+  background: #1a1a1a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.owner-layout__brand {
+  padding: 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.owner-layout__brand-title {
+  color: #e85d04;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.owner-layout__brand-subtitle {
+  color: #888;
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+.owner-layout__nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.owner-layout__nav-item {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #aaa;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.owner-layout__nav-item:hover {
+  background: #242424;
+  color: white;
+}
+
+.owner-layout__nav-item--active {
+  color: white;
+  background: #2a2a2a;
+  border-left: 3px solid #e85d04;
+}
+
+.owner-layout__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #333;
+}
+
+.owner-layout__user-info {
+  font-size: 0.82rem;
+  color: #888;
+  margin-bottom: 0.75rem;
+}
+
+.owner-layout__user-name {
+  color: #ddd;
+  font-weight: 600;
+}
+
+.owner-layout__logout-btn {
+  width: 100%;
+  padding: 0.5rem;
+  background: #333;
+  color: #ddd;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.owner-layout__logout-btn:hover {
+  background: #444;
+}
+
+.owner-layout__main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}

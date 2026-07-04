@@ -1,0 +1,27 @@
+.error-message {
+  text-align: center;
+  padding: 3rem;
+}
+
+.error-message__icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-message__text {
+  color: #c62828;
+  margin-bottom: 1rem;
+}
+
+.error-message__button {
+  padding: 0.5rem 1.5rem;
+  background: #e85d04;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.error-message__button:hover {
+  opacity: 0.9;
+}

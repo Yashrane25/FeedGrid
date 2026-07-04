@@ -1,0 +1,88 @@
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f0ee;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background: #0f172a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.admin-brand {
+  padding: 1.5rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.admin-brand-title {
+  color: #f97316;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.admin-brand-sub {
+  color: #64748b;
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+.admin-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.admin-nav-item {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
+.admin-nav-item-active {
+  color: white;
+  background: #1e293b;
+  border-left: 3px solid #f97316;
+}
+
+.admin-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #1e293b;
+}
+
+.admin-user-info {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+}
+
+.admin-user-name {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.admin-logout-btn {
+  width: 100%;
+  padding: 0.5rem;
+  background: #1e293b;
+  color: #cbd5e1;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}

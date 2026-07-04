@@ -1,0 +1,98 @@
+.checkout-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.title {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+}
+
+.row-line {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.summary {
+  position: sticky;
+  top: 80px;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  color: black;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #e85d04;
+  color: white;
+  border: none;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.payment-error {
+  background: #fdecea;
+  color: #c62828;
+  padding: 0.7rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+.secure-text {
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.7rem;
+  color: #888;
+}
+
+.checkout-error {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fdecea;
+  color: #b42318;
+  border: 1px solid #f5c2c7;
+  font-size: 14px;
+  font-weight: 500;
+}

@@ -1,0 +1,99 @@
+.agent-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f4f8;
+}
+
+.agent-sidebar {
+  width: 240px;
+  background: #0d3b2e;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.agent-sidebar__brand {
+  padding: 1.5rem;
+  border-bottom: 1px solid #1a5c44;
+}
+
+.agent-sidebar__brand-title {
+  color: #4caf50;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.agent-sidebar__brand-sub {
+  color: #6b9e7f;
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+.agent-sidebar__nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.agent-sidebar__nav-item {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #8bbfa0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.agent-sidebar__nav-item:hover {
+  color: white;
+  background: #1a5c44;
+}
+
+.agent-sidebar__nav-item--active {
+  color: white;
+  background: #1a5c44;
+  border-left: 3px solid #4caf50;
+}
+
+.agent-sidebar__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #1a5c44;
+}
+
+.agent-sidebar__user-info {
+  font-size: 0.8rem;
+  color: #6b9e7f;
+  margin-bottom: 0.75rem;
+}
+
+.agent-sidebar__user-name {
+  color: #b2dfb8;
+  font-weight: 600;
+}
+
+.agent-sidebar__logout-btn {
+  width: 100%;
+  padding: 0.5rem;
+  background: #1a5c44;
+  color: #b2dfb8;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+.agent-sidebar__logout-btn:hover {
+  background: #256b50;
+}
+
+.agent-main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
