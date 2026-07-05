@@ -1,4 +1,4 @@
-# FeedGrid — Full-Stack Food Delivery Platform
+# FeedGrid - Full-Stack Food Delivery Platform
 
 <div align="center">
 
@@ -9,6 +9,7 @@
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat-square&logo=stripe)](https://stripe.com/)
 
 **A production-ready food delivery platform built with the MERN stack.**
+
 Real time order tracking · Stripe payments · Live GPS map · Role-based dashboards
 
 </div>
@@ -167,14 +168,14 @@ This project was built to demonstrate production level engineering practices inc
 
 Make sure you have the following installed on your machine:
 
-- **Node.js** v20 or higher — [Download](https://nodejs.org/)
+- **Node.js** v20 or higher - [Download](https://nodejs.org/)
 - **npm** v10 or higher (comes with Node.js)
-- **Git** — [Download](https://git-scm.com/)
+- **Git** - [Download](https://git-scm.com/)
 
 You will also need free accounts on:
-- [MongoDB Atlas](https://www.mongodb.com/atlas) — free M0 cluster
-- [Stripe](https://stripe.com/) — test mode keys
-- [Redis Cloud](https://redis.io/try-free/) — free 30MB instance (optional)
+- [MongoDB Atlas](https://www.mongodb.com/atlas) - free M0 cluster
+- [Stripe](https://stripe.com/) - test mode keys
+- [Redis Cloud](https://redis.io/try-free/) - free 30MB instance (optional)
 
 ---
 
@@ -225,40 +226,40 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
 
 ## Running Locally
 
-### Step 1 — Clone the repository
+### Step 1 - Clone the repository
 
 ```bash
 git clone https://github.com/Yashrane25/feedgrid.git
 cd feedgrid
 ```
 
-### Step 2 — Install backend dependencies
+### Step 2 - Install backend dependencies
 
 ```bash
 cd backend
 npm install
 ```
 
-### Step 3 — Install frontend dependencies
+### Step 3 - Install frontend dependencies
 
 ```bash
 cd ../frontend
 npm install
 ```
 
-### Step 4 — Set up MongoDB Atlas
+### Step 4 - Set up MongoDB Atlas
 
 Create a free MongoDB Atlas cluster, configure a database user and network access, then copy your connection string and add it as the `MONGO_URI` in `backend/.env`.
 
-### Step 5 — Set up Stripe
+### Step 5 - Set up Stripe
 
 Create a Stripe account in **Test Mode**, copy your **Secret Key** to `backend/.env` and **Publishable Key** to `frontend/.env`.
 
-### Step 6 — Create an Admin Account
+### Step 6 - Create an Admin Account
 
 Register a new user, then update its `role` to `admin` in the MongoDB `users` collection. Log in again to access the admin dashboard.
 
-### Step 7 — Start the Development Servers
+### Step 7 - Start the Development Servers
 
 Run the backend and frontend in separate terminal windows:
 
@@ -275,133 +276,17 @@ npm run dev
 ```
 ---
 
-feedgrid/
-│
-├── backend/
-│   ├── config/
-│   │   ├── db.js               # MongoDB Atlas connection
-│   │   └── redis.js            # Redis client with graceful degradation
-│   │
-│   ├── controllers/
-│   │   ├── authController.js   # Register, login, logout, refresh token
-│   │   ├── restaurantController.js  # Restaurant CRUD + cache integration
-│   │   ├── menuController.js   # Menu item CRUD + cache invalidation
-│   │   ├── orderController.js  # Order lifecycle + Socket.io events
-│   │   ├── paymentController.js # Stripe PaymentIntent + price verification
-│   │   └── adminController.js  # Stats, analytics, user management
-│   │
-│   ├── middleware/
-│   │   ├── authMiddleware.js   # JWT protect + role-based restrictTo
-│   │   ├── cacheMiddleware.js  # Redis cache interceptor
-│   │   └── rateLimitMiddleware.js  # Auth, API, payment rate limiters
-│   │
-│   ├── models/
-│   │   ├── User.js             # User schema with bcrypt pre-save hook
-│   │   ├── Restaurant.js       # Restaurant schema with GeoJSON location
-│   │   ├── MenuItem.js         # Menu item schema with category indexing
-│   │   └── Order.js            # Order schema with status history audit trail
-│   │
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   ├── restaurantRoutes.js # Mounts menuRoutes as nested router
-│   │   ├── menuRoutes.js       # mergeParams: true for nested routing
-│   │   ├── orderRoutes.js
-│   │   ├── paymentRoutes.js
-│   │   └── adminRoutes.js
-│   │
-│   ├── socket/
-│   │   ├── socketServer.js     # Socket.io init + JWT auth middleware
-│   │   └── socketEvents.js     # Emit helper functions
-│   │
-│   ├── .env                    # Environment variables (not committed)
-│   ├── package.json
-│   └── server.js               # Express app + HTTP server + Socket.io
-│
-└── frontend/
-    ├── src/
-    │   ├── api/
-    │   │   └── axios.js        # Axios instance + request/response interceptors
-    │   │
-    │   ├── components/
-    │   │   ├── CartDrawer.jsx       # Sliding cart panel
-    │   │   ├── ClearCartDialog.jsx  # Multi-restaurant cart conflict dialog
-    │   │   ├── LiveMap.jsx          # Leaflet map with 3 custom markers
-    │   │   ├── MenuItemCard.jsx     # Menu item with veg indicator
-    │   │   ├── RestaurantCard.jsx   # Restaurant browse card
-    │   │   ├── RestaurantForm.jsx   # Reusable create/edit form
-    │   │   ├── RatingForm.jsx       # Star rating submission
-    │   │   ├── ReviewsSection.jsx   # Reviews with distribution bars
-    │   │   ├── StarRating.jsx       # Interactive/readonly star component
-    │   │   └── SocketStatus.jsx     # Live connection indicator
-    │   │
-    │   ├── context/
-    │   │   ├── AuthContext.jsx   # User state + session restore on refresh
-    │   │   ├── CartContext.jsx   # Cart state + localStorage persistence
-    │   │   └── SocketContext.jsx # Socket.io connection management
-    │   │
-    │   ├── hooks/
-    │   │   ├── useDebounce.js      # Delays search input API calls
-    │   │   ├── useRestaurants.js   # Restaurant list with filters
-    │   │   └── useSocketEvent.js   # Socket event subscription + cleanup
-    │   │
-    │   ├── layouts/
-    │   │   ├── MainLayout.jsx   # Customer navbar layout
-    │   │   ├── OwnerLayout.jsx  # Owner sidebar layout
-    │   │   ├── AdminLayout.jsx  # Admin sidebar layout
-    │   │   └── AgentLayout.jsx  # Agent sidebar layout
-    │   │
-    │   ├── pages/
-    │   │   ├── admin/
-    │   │   │   ├── AdminDashboard.jsx      # Analytics with recharts
-    │   │   │   ├── AdminRestaurantsPage.jsx
-    │   │   │   └── AdminUsersPage.jsx
-    │   │   │
-    │   │   ├── agent/
-    │   │   │   ├── AgentDashboard.jsx      # Available pickups
-    │   │   │   └── AgentActivePage.jsx     # Active delivery + GPS sharing
-    │   │   │
-    │   │   ├── owner/
-    │   │   │   ├── OwnerDashboard.jsx      # Restaurant management
-    │   │   │   ├── OwnerOrdersPage.jsx     # Real-time order management
-    │   │   │   ├── NewRestaurantPage.jsx
-    │   │   │   └── ManageRestaurantPage.jsx # Details + menu tabs
-    │   │   │
-    │   │   ├── BrowsePage.jsx          # Restaurant discovery
-    │   │   ├── CheckoutPage.jsx        # Stripe payment flow
-    │   │   ├── LiveTrackingPage.jsx    # Real-time GPS map
-    │   │   ├── MyOrdersPage.jsx        # Order history
-    │   │   ├── OrderTrackingPage.jsx   # Order status timeline
-    │   │   └── RestaurantDetailPage.jsx # Menu + reviews
-    │   │
-    │   ├── routes/
-    │   │   ├── AppRoutes.jsx       # All route definitions
-    │   │   ├── ProtectedRoute.jsx  # Auth + role guard
-    │   │   └── PublicRoute.jsx     # Redirect if authenticated
-    │   │
-    │   ├── services/
-    │   │   ├── restaurantService.js
-    │   │   ├── orderService.js
-    │   │   ├── agentService.js
-    │   │   └── adminService.js
-    │   │
-    │   ├── utils/
-    │   │   ├── geocode.js        # Nominatim address → coordinates
-    │   │   ├── mapIcons.js       # Custom Leaflet div icons
-    │   │   └── leafletIconFix.js # Vite + Leaflet icon path fix
-    │   │
-    │   ├── App.jsx               # BrowserRouter + all providers
-    │   └── main.jsx              # React root + Leaflet CSS import
-    │
-    ├── .env                      # Environment variables (not committed)
-    └── package.json
-
-    ---
-
 ## Contact
 
-**Yash R. Rane**
+**Yash Rane**
 - LinkedIn: [linkedin.com/in/yourprofile](https://www.linkedin.com/in/yashrane25/)
 - GitHub: [@yourusername](https://github.com/Yashrane25)
 - Email: yashrane332@gmail.com
 
 ---
+
+<div align="center">
+
+⭐ Star this repository if you found it helpful
+
+</div>
