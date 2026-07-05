@@ -93,8 +93,7 @@ This project was built to demonstrate production level engineering practices inc
 
 ## System Architecture
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e2624997-c539-449a-a145-769d81088ffd" />
-
+IMG
 
 ---
 
