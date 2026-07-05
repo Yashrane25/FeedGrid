@@ -1,4 +1,4 @@
-# FeedGrid - Full-Stack Food Delivery Platform
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/2b00e132-dc2d-427d-91cc-0fd273c73c7b" /># FeedGrid - Full-Stack Food Delivery Platform
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=flat-square&logo=nodedotjs)](https://nodejs.org/)
@@ -93,27 +93,309 @@ This project was built to demonstrate production level engineering practices inc
 
 ## System Architecture
 
-┌─────────────────────────────────────────────────────────┐
-│                        CLIENT                           │
-│              React + Vite (Vercel)                      │
-│                                                         │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │
-│  │ Auth     │ │ Cart     │ │ Socket   │ │ Leaflet  │  │
-│  │ Context  │ │ Context  │ │ Context  │ │ Map      │  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘  │
-└────────────────────────┬────────────────────────────────┘
-                         │  HTTPS + WSS
-┌────────────────────────▼────────────────────────────────┐
-│                       SERVER                            │
-│              Node.js + Express (Render)                 │
-│                                                         │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │
-│  │ REST API │ │ Socket   │ │ Auth     │ │ Rate     │  │
-│  │ Routes   │ │ Server   │ │ Middleware│ │ Limiter  │  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘  │
-└──────┬──────────────┬──────────────┬────────────────────┘
-       │              │              │
-┌──────▼───┐  ┌───────▼──┐  ┌──────▼───┐
-│ MongoDB  │  │  Redis   │  │  Stripe  │
-│  Atlas   │  │  Cache   │  │   API    │
-└──────────┘  └──────────┘  └──────────┘
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/e2624997-c539-449a-a145-769d81088ffd" />
+
+
+---
+
+## API Documentation
+
+### Authentication
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | Public | Register new user |
+| POST | `/api/auth/login` | Public | Login and get tokens |
+| POST | `/api/auth/logout` | Private | Logout and clear cookie |
+| POST | `/api/auth/refresh-token` | Public | Get new access token |
+| GET | `/api/auth/me` | Private | Get current user |
+
+### Restaurants
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | `/api/restaurants` | Public | Browse with filters and pagination |
+| POST | `/api/restaurants` | Owner | Create restaurant |
+| GET | `/api/restaurants/my` | Owner | Get own restaurants |
+| GET | `/api/restaurants/:id` | Public | Get restaurant + menu |
+| PUT | `/api/restaurants/:id` | Owner | Update restaurant |
+| DELETE | `/api/restaurants/:id` | Owner | Delete restaurant |
+| PATCH | `/api/restaurants/:id/approve` | Admin | Approve/unapprove |
+| PATCH | `/api/restaurants/:id/toggle` | Owner | Toggle open/closed |
+| GET | `/api/restaurants/:id/reviews` | Public | Get reviews |
+
+### Menu Items
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| GET | `/api/restaurants/:id/menu` | Public | Get all menu items |
+| POST | `/api/restaurants/:id/menu` | Owner | Add menu item |
+| PUT | `/api/restaurants/:id/menu/:itemId` | Owner | Update item |
+| DELETE | `/api/restaurants/:id/menu/:itemId` | Owner | Delete item |
+| PATCH | `/api/restaurants/:id/menu/:itemId/toggle` | Owner | Toggle availability |
+
+### Orders
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | `/api/orders` | Customer | Create order after payment |
+| GET | `/api/orders/my` | Customer | Get order history |
+| GET | `/api/orders/:id` | Auth | Get single order |
+| PATCH | `/api/orders/:id/status` | Owner/Agent | Update status |
+| POST | `/api/orders/:id/rate` | Customer | Submit rating |
+| GET | `/api/orders/available` | Agent | Available pickups |
+| PATCH | `/api/orders/:id/assign-agent` | Agent | Accept delivery |
+| PATCH | `/api/orders/:id/location` | Agent | Update GPS location |
+
+### Payments & Admin
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | `/api/payments/create-intent` | Customer | Create Stripe PaymentIntent |
+| GET | `/api/admin/stats` | Admin | Platform statistics |
+| GET | `/api/admin/analytics` | Admin | Chart data |
+| GET | `/api/admin/restaurants` | Admin | All restaurants |
+| GET | `/api/admin/users` | Admin | All users |
+| PATCH | `/api/admin/users/:id/role` | Admin | Change user role |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed on your machine:
+
+- **Node.js** v20 or higher — [Download](https://nodejs.org/)
+- **npm** v10 or higher (comes with Node.js)
+- **Git** — [Download](https://git-scm.com/)
+
+You will also need free accounts on:
+- [MongoDB Atlas](https://www.mongodb.com/atlas) — free M0 cluster
+- [Stripe](https://stripe.com/) — test mode keys
+- [Redis Cloud](https://redis.io/try-free/) — free 30MB instance (optional)
+
+---
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+
+Create a file named `.env` inside the `backend` folder with these values:
+
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+CLIENT_URL=http://localhost:5173
+
+# MongoDB Atlas
+# Get this from Atlas → Connect → Drivers → Node.js
+MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/fooddelivery?retryWrites=true&w=majority
+
+# JWT Secrets — use long random strings (minimum 32 characters each)
+JWT_ACCESS_SECRET=your_very_long_random_access_secret_key_here_minimum_32_chars
+JWT_REFRESH_SECRET=your_very_long_random_refresh_secret_key_here_different_from_above
+JWT_ACCESS_EXPIRE=15m
+JWT_REFRESH_EXPIRE=7d
+
+# Stripe — get from dashboard.stripe.com → Developers → API Keys
+# Make sure you are in TEST MODE
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+STRIPE_WEBHOOK_SECRET=whsec_placeholder
+
+# Redis — get from Redis Cloud free tier (optional — app works without it)
+REDIS_URL=redis://default:password@your-redis-host:port
+```
+
+### Frontend (`frontend/.env`)
+
+Create a file named `.env` inside the `frontend` folder:
+
+```env
+# Backend API URL
+VITE_API_URL=http://localhost:5000/api
+
+# Stripe — get from dashboard.stripe.com → Developers → API Keys
+# This is the PUBLISHABLE key (starts with pk_test_)
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+```
+---
+
+## Running Locally
+
+### Step 1 — Clone the repository
+
+```bash
+git clone https://github.com/Yashrane25/feedgrid.git
+cd feedgrid
+```
+
+### Step 2 — Install backend dependencies
+
+```bash
+cd backend
+npm install
+```
+
+### Step 3 — Install frontend dependencies
+
+```bash
+cd ../frontend
+npm install
+```
+
+### Step 4 — Set up MongoDB Atlas
+
+Create a free MongoDB Atlas cluster, configure a database user and network access, then copy your connection string and add it as the `MONGO_URI` in `backend/.env`.
+
+### Step 5 — Set up Stripe
+
+Create a Stripe account in **Test Mode**, copy your **Secret Key** to `backend/.env` and **Publishable Key** to `frontend/.env`.
+
+### Step 6 — Create an Admin Account
+
+Register a new user, then update its `role` to `admin` in the MongoDB `users` collection. Log in again to access the admin dashboard.
+
+### Step 7 — Start the Development Servers
+
+Run the backend and frontend in separate terminal windows:
+
+**Backend**
+```bash
+cd backend
+npm run dev
+```
+
+**Frontend**
+```bash
+cd frontend
+npm run dev
+```
+---
+
+feedgrid/
+│
+├── backend/
+│   ├── config/
+│   │   ├── db.js               # MongoDB Atlas connection
+│   │   └── redis.js            # Redis client with graceful degradation
+│   │
+│   ├── controllers/
+│   │   ├── authController.js   # Register, login, logout, refresh token
+│   │   ├── restaurantController.js  # Restaurant CRUD + cache integration
+│   │   ├── menuController.js   # Menu item CRUD + cache invalidation
+│   │   ├── orderController.js  # Order lifecycle + Socket.io events
+│   │   ├── paymentController.js # Stripe PaymentIntent + price verification
+│   │   └── adminController.js  # Stats, analytics, user management
+│   │
+│   ├── middleware/
+│   │   ├── authMiddleware.js   # JWT protect + role-based restrictTo
+│   │   ├── cacheMiddleware.js  # Redis cache interceptor
+│   │   └── rateLimitMiddleware.js  # Auth, API, payment rate limiters
+│   │
+│   ├── models/
+│   │   ├── User.js             # User schema with bcrypt pre-save hook
+│   │   ├── Restaurant.js       # Restaurant schema with GeoJSON location
+│   │   ├── MenuItem.js         # Menu item schema with category indexing
+│   │   └── Order.js            # Order schema with status history audit trail
+│   │
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── restaurantRoutes.js # Mounts menuRoutes as nested router
+│   │   ├── menuRoutes.js       # mergeParams: true for nested routing
+│   │   ├── orderRoutes.js
+│   │   ├── paymentRoutes.js
+│   │   └── adminRoutes.js
+│   │
+│   ├── socket/
+│   │   ├── socketServer.js     # Socket.io init + JWT auth middleware
+│   │   └── socketEvents.js     # Emit helper functions
+│   │
+│   ├── .env                    # Environment variables (not committed)
+│   ├── package.json
+│   └── server.js               # Express app + HTTP server + Socket.io
+│
+└── frontend/
+    ├── src/
+    │   ├── api/
+    │   │   └── axios.js        # Axios instance + request/response interceptors
+    │   │
+    │   ├── components/
+    │   │   ├── CartDrawer.jsx       # Sliding cart panel
+    │   │   ├── ClearCartDialog.jsx  # Multi-restaurant cart conflict dialog
+    │   │   ├── LiveMap.jsx          # Leaflet map with 3 custom markers
+    │   │   ├── MenuItemCard.jsx     # Menu item with veg indicator
+    │   │   ├── RestaurantCard.jsx   # Restaurant browse card
+    │   │   ├── RestaurantForm.jsx   # Reusable create/edit form
+    │   │   ├── RatingForm.jsx       # Star rating submission
+    │   │   ├── ReviewsSection.jsx   # Reviews with distribution bars
+    │   │   ├── StarRating.jsx       # Interactive/readonly star component
+    │   │   └── SocketStatus.jsx     # Live connection indicator
+    │   │
+    │   ├── context/
+    │   │   ├── AuthContext.jsx   # User state + session restore on refresh
+    │   │   ├── CartContext.jsx   # Cart state + localStorage persistence
+    │   │   └── SocketContext.jsx # Socket.io connection management
+    │   │
+    │   ├── hooks/
+    │   │   ├── useDebounce.js      # Delays search input API calls
+    │   │   ├── useRestaurants.js   # Restaurant list with filters
+    │   │   └── useSocketEvent.js   # Socket event subscription + cleanup
+    │   │
+    │   ├── layouts/
+    │   │   ├── MainLayout.jsx   # Customer navbar layout
+    │   │   ├── OwnerLayout.jsx  # Owner sidebar layout
+    │   │   ├── AdminLayout.jsx  # Admin sidebar layout
+    │   │   └── AgentLayout.jsx  # Agent sidebar layout
+    │   │
+    │   ├── pages/
+    │   │   ├── admin/
+    │   │   │   ├── AdminDashboard.jsx      # Analytics with recharts
+    │   │   │   ├── AdminRestaurantsPage.jsx
+    │   │   │   └── AdminUsersPage.jsx
+    │   │   │
+    │   │   ├── agent/
+    │   │   │   ├── AgentDashboard.jsx      # Available pickups
+    │   │   │   └── AgentActivePage.jsx     # Active delivery + GPS sharing
+    │   │   │
+    │   │   ├── owner/
+    │   │   │   ├── OwnerDashboard.jsx      # Restaurant management
+    │   │   │   ├── OwnerOrdersPage.jsx     # Real-time order management
+    │   │   │   ├── NewRestaurantPage.jsx
+    │   │   │   └── ManageRestaurantPage.jsx # Details + menu tabs
+    │   │   │
+    │   │   ├── BrowsePage.jsx          # Restaurant discovery
+    │   │   ├── CheckoutPage.jsx        # Stripe payment flow
+    │   │   ├── LiveTrackingPage.jsx    # Real-time GPS map
+    │   │   ├── MyOrdersPage.jsx        # Order history
+    │   │   ├── OrderTrackingPage.jsx   # Order status timeline
+    │   │   └── RestaurantDetailPage.jsx # Menu + reviews
+    │   │
+    │   ├── routes/
+    │   │   ├── AppRoutes.jsx       # All route definitions
+    │   │   ├── ProtectedRoute.jsx  # Auth + role guard
+    │   │   └── PublicRoute.jsx     # Redirect if authenticated
+    │   │
+    │   ├── services/
+    │   │   ├── restaurantService.js
+    │   │   ├── orderService.js
+    │   │   ├── agentService.js
+    │   │   └── adminService.js
+    │   │
+    │   ├── utils/
+    │   │   ├── geocode.js        # Nominatim address → coordinates
+    │   │   ├── mapIcons.js       # Custom Leaflet div icons
+    │   │   └── leafletIconFix.js # Vite + Leaflet icon path fix
+    │   │
+    │   ├── App.jsx               # BrowserRouter + all providers
+    │   └── main.jsx              # React root + Leaflet CSS import
+    │
+    ├── .env                      # Environment variables (not committed)
+    └── package.json
+
+    ---
+
+## Contact
+
+**Yash R. Rane**
+- LinkedIn: [linkedin.com/in/yourprofile](https://www.linkedin.com/in/yashrane25/)
+- GitHub: [@yourusername](https://github.com/Yashrane25)
+- Email: yashrane332@gmail.com
+
+---
