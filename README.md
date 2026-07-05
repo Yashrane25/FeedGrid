@@ -274,8 +274,8 @@ npm run dev
 ## Contact
 
 **Yash Rane**
-- LinkedIn: [linkedin.com/in/yourprofile](https://www.linkedin.com/in/yashrane25/)
-- GitHub: [@yourusername](https://github.com/Yashrane25)
+- LinkedIn: [yashrane25](https://www.linkedin.com/in/yashrane25/)
+- GitHub: [yashrane25](https://github.com/Yashrane25)
 - Email: yashrane332@gmail.com
 
 ---
