@@ -18,7 +18,7 @@ Real time order tracking · Stripe payments · Live GPS map · Role-based dashbo
 
 FeedGrid is a full stack food delivery platform built from scratch. It supports three distinct user roles with dedicated dashboards, real time order management via Socket.io, live delivery tracking on a Leaflet.js map and secure Stripe payment processing.
 
-This project was built to demonstrate production level engineering practices including JWT refresh token rotation, server side payment verification, MongoDB aggregation pipelines, WebSocket room based broadcasting and Redis caching with cache invalidation.
+This project was built to demonstrate production level engineering practices including JWT refresh token rotation, server side payment verification, MongoDB aggregation pipelines, WebSocket room based broadcasting.
 
 ---
 
@@ -85,14 +85,12 @@ This project was built to demonstrate production level engineering practices inc
 | Helmet.js | Security HTTP headers |
 | express-rate-limit | Request rate limiting |
 | express-mongo-sanitize | NoSQL injection prevention |
-| ioredis | Redis client with auto-reconnect |
 | nodemon | Development auto-restart |
 
 ### Database & Services
 | Service | Purpose |
 |---|---|
 | MongoDB Atlas | Primary database (free tier) |
-| Redis Cloud | Response caching |
 | Stripe Test Mode | Payment processing |
 | OpenStreetMap + Nominatim | Free map tiles and geocoding |
 
@@ -175,7 +173,6 @@ Make sure you have the following installed on your machine:
 You will also need free accounts on:
 - [MongoDB Atlas](https://www.mongodb.com/atlas) - free M0 cluster
 - [Stripe](https://stripe.com/) - test mode keys
-- [Redis Cloud](https://redis.io/try-free/) - free 30MB instance (optional)
 
 ---
 
@@ -206,8 +203,6 @@ JWT_REFRESH_EXPIRE=7d
 STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_placeholder
 
-# Redis — get from Redis Cloud free tier (optional — app works without it)
-REDIS_URL=redis://default:password@your-redis-host:port
 ```
 
 ### Frontend (`frontend/.env`)
