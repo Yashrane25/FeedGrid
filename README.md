@@ -1,4 +1,6 @@
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/2b00e132-dc2d-427d-91cc-0fd273c73c7b" /># FeedGrid - Full-Stack Food Delivery Platform
+# FeedGrid — Full-Stack Food Delivery Platform
+
+<div align="center">
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=flat-square&logo=nodedotjs)](https://nodejs.org/)
@@ -7,7 +9,11 @@
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat-square&logo=stripe)](https://stripe.com/)
 
 **A production-ready food delivery platform built with the MERN stack.**
-Real-time order tracking · Stripe payments · Live GPS map · Role-based dashboards
+Real time order tracking · Stripe payments · Live GPS map · Role-based dashboards
+
+</div>
+
+---
 
 FeedGrid is a full stack food delivery platform built from scratch. It supports three distinct user roles with dedicated dashboards, real time order management via Socket.io, live delivery tracking on a Leaflet.js map and secure Stripe payment processing.
 
@@ -93,7 +99,8 @@ This project was built to demonstrate production level engineering practices inc
 
 ## System Architecture
 
-IMG
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/a0fb6d24-43b1-4a97-8ff2-ac2ebbdf16e3" />
+
 
 ---
 
