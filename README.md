@@ -109,12 +109,13 @@ FeedGrid uses **Redis** as an in memory caching layer between the Express server
 
 ## How it works
 
-### First Request (Cache MISS)
 
 ```
+              #### First Request (Cache MISS)
+
                     ┌─────────────────┐
-                    │   Customer      │
-                    │ opens /restaurants│
+                    │    Customer     │
+                    │opens/restaurants│
                     └────────┬────────┘
                              │
                     ┌────────▼────────┐
@@ -122,7 +123,7 @@ FeedGrid uses **Redis** as an in memory caching layer between the Express server
                     └────────┬────────┘
                              │
               ┌──────────────▼──────────────┐
-              │     Check Redis first        │
+              │     Check Redis first       │
               └──────────┬──────────────────┘
                          │
             ┌────────────▼────────────┐
@@ -133,9 +134,9 @@ FeedGrid uses **Redis** as an in memory caching layer between the Express server
           │ YES (Cache HIT)             │ NO (Cache MISS)
           │                             │
     ┌─────▼──────┐              ┌───────▼───────┐
-    │ Return     │              │ Query MongoDB  │
-    │ instantly  │              │ (slower)       │
-    │ 2ms ✅     │              └───────┬───────┘
+    │ Return     │              │ Query MongoDB │
+    │ instantly  │              │ (slower)      │
+    │ 2ms        │              └───────┬───────┘
     └────────────┘                      │
                                 ┌───────▼───────┐
                                 │ Store result  │
@@ -265,7 +266,7 @@ Make sure you have the following installed on your machine:
 You will also need free accounts on:
 - [MongoDB Atlas](https://www.mongodb.com/atlas) - free M0 cluster (required)
 - [Stripe](https://stripe.com/) - test mode keys (required)
-- [Redis Cloud](https://redis.io/try-free/) - free 30MB instance (optional — app works without it)
+- [Redis Cloud](https://redis.io/try-free/) - free 30MB instance (optional - app works without it)
 
 ---
 
