@@ -104,7 +104,7 @@ This project was built to demonstrate production level engineering practices inc
 
 ---
 
-# ⚡ Redis Caching Layer
+#  Redis Caching Layer
 
 FeedGrid uses **Redis** as an in memory caching layer between the Express server and MongoDB Atlas to reduce database load and improve response times for frequently accessed restaurant data.
 
@@ -162,7 +162,7 @@ Cache entries are automatically invalidated whenever restaurant or menu data cha
 
 Redis is an optional performance optimization rather than a required dependency.
 
-If Redis is unavailable (invalid connection string, network issue, or service outage), FeedGrid automatically bypasses the cache and serves data directly from MongoDB without affecting application functionality.
+If Redis is unavailable (invalid connection string, network issue or service outage) FeedGrid automatically bypasses the cache and serves data directly from MongoDB without affecting application functionality.
 
 ## Performance Benefits
 
