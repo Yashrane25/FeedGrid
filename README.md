@@ -78,6 +78,7 @@ This project was built to demonstrate production level engineering practices inc
 | Node.js + Express.js | REST API server |
 | Socket.io | WebSocket server with rooms |
 | Mongoose | MongoDB ODM |
+| Redis Cloud | In memory caching layer (optional) |
 | JSON Web Token | Access token (15 min) |
 | bcryptjs | Password hashing |
 | cookie-parser | HttpOnly refresh token cookies |
@@ -100,6 +101,97 @@ This project was built to demonstrate production level engineering practices inc
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/a0fb6d24-43b1-4a97-8ff2-ac2ebbdf16e3" />
 
+---
+
+# ⚡ Redis Caching Layer
+
+FeedGrid uses **Redis** as an in memory caching layer between the Express server and MongoDB Atlas to reduce database load and improve response times for frequently accessed restaurant data.
+
+## How it works
+
+### First Request (Cache MISS)
+
+```
+                    ┌─────────────────┐
+                    │   Customer      │
+                    │ opens /restaurants│
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  Express Server │
+                    └────────┬────────┘
+                             │
+              ┌──────────────▼──────────────┐
+              │     Check Redis first        │
+              └──────────┬──────────────────┘
+                         │
+            ┌────────────▼────────────┐
+            │   Key exists in Redis?  │
+            └────────────┬────────────┘
+                         │
+          ┌──────────────┴──────────────┐
+          │ YES (Cache HIT)             │ NO (Cache MISS)
+          │                             │
+    ┌─────▼──────┐              ┌───────▼───────┐
+    │ Return     │              │ Query MongoDB  │
+    │ instantly  │              │ (slower)       │
+    │ 2ms ✅     │              └───────┬───────┘
+    └────────────┘                      │
+                                ┌───────▼───────┐
+                                │ Store result  │
+                                │ in Redis      │
+                                │ (TTL: 5 min)  │
+                                └───────┬───────┘
+                                        │
+                                ┌───────▼───────┐
+                                │ Return to     │
+                                │ customer      │
+                                │ 300ms         │
+                                └───────────────┘
+```
+
+## Cached Data
+
+| Cache Key | TTL | Invalidated When |
+|---|---|---|
+| `restaurants:list:*` | 5 minutes | Restaurant created, updated, approved or deleted |
+| `restaurants:detail:{id}` | 10 minutes | Restaurant updated or menu changes |
+| `restaurants:menu:{id}` | 10 minutes | Menu item created, updated, deleted or availability changed |
+
+Cache entries are automatically invalidated whenever restaurant or menu data changes, ensuring users always receive fresh data.
+
+## Graceful Degradation
+
+Redis is an optional performance optimization rather than a required dependency.
+
+If Redis is unavailable (invalid connection string, network issue, or service outage), FeedGrid automatically bypasses the cache and serves data directly from MongoDB without affecting application functionality.
+
+## Performance Benefits
+
+Without Redis:
+
+- Every request for restaurant data queries MongoDB.
+
+With Redis:
+
+- The first request populates the cache.
+- Subsequent requests are served directly from Redis until the cache expires or is invalidated.
+
+Benefits:
+
+- Reduced MongoDB query load
+- Faster responses for frequently accessed data
+- Better scalability under concurrent traffic
+
+### Setup (Optional)
+
+Redis is completely optional for local development. The app works without it.
+
+If you want to enable caching locally:
+1. Create a free account at [Redis Cloud](https://redis.io/try-free/)
+2. Create a free 30MB database
+3. Copy the connection string
+4. Add it to `backend/.env` as `REDIS_URL`
 
 ---
 
@@ -171,8 +263,9 @@ Make sure you have the following installed on your machine:
 - **Git** - [Download](https://git-scm.com/)
 
 You will also need free accounts on:
-- [MongoDB Atlas](https://www.mongodb.com/atlas) - free M0 cluster
-- [Stripe](https://stripe.com/) - test mode keys
+- [MongoDB Atlas](https://www.mongodb.com/atlas) - free M0 cluster (required)
+- [Stripe](https://stripe.com/) - test mode keys (required)
+- [Redis Cloud](https://redis.io/try-free/) - free 30MB instance (optional — app works without it)
 
 ---
 
@@ -192,16 +285,19 @@ CLIENT_URL=http://localhost:5173
 # Get this from Atlas → Connect → Drivers → Node.js
 MONGO_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/fooddelivery?retryWrites=true&w=majority
 
-# JWT Secrets — use long random strings (minimum 32 characters each)
+# JWT Secrets - use long random strings (minimum 32 characters each)
 JWT_ACCESS_SECRET=your_very_long_random_access_secret_key_here_minimum_32_chars
 JWT_REFRESH_SECRET=your_very_long_random_refresh_secret_key_here_different_from_above
 JWT_ACCESS_EXPIRE=15m
 JWT_REFRESH_EXPIRE=7d
 
-# Stripe — get from dashboard.stripe.com → Developers → API Keys
+# Stripe - get from dashboard.stripe.com → Developers → API Keys
 # Make sure you are in TEST MODE
 STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_placeholder
+
+# Redis - get from Redis Cloud free tier (optional - app works without it)
+REDIS_URL=redis://default:password@your-redis-host:port
 
 ```
 
