@@ -111,8 +111,6 @@ FeedGrid uses **Redis** as an in memory caching layer between the Express server
 
 
 ```
-              #### First Request (Cache MISS)
-
                     ┌─────────────────┐
                     │    Customer     │
                     │opens/restaurants│
