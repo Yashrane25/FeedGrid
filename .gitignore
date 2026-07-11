@@ -1,18 +1,18 @@
-# Dependencies
+#Dependencies
 node_modules/
 
-# Environment files
+#Environment files
 .env
 **/.env
 .env.*
 
-# Logs
+#Logs
 *.log
 
-# Build folders
+#Build folders
 dist/
 build/
 
-# OS files
+#OS files
 .DS_Store
 Thumbs.db

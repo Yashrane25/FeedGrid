@@ -1,5 +1,6 @@
 const MenuItem = require("../models/MenuItem");
 const Restaurant = require("../models/Restaurant");
+const { deleteCache, deleteCachePattern } = require("../config/redis");
 
 const verifyRestaurantOwnership = async (restaurantId, userId) => {
     const restaurant = await Restaurant.findById(restaurantId);
@@ -93,6 +94,11 @@ const addMenuItem = async (req, res) => {
             spiceLevel: spiceLevel || null,
             tags: tags || [],
         });
+
+        //Invalidate menu and restaurant detail cache
+        await deleteCache(`restaurants:menu:${restaurantId}`);
+        await deleteCache(`restaurants:categories:${restaurantId}`);
+        await deleteCache(`restaurants:detail:${restaurantId}`);
 
         res.status(201).json({
             success: true,
@@ -268,6 +274,9 @@ const updateMenuItem = async (req, res) => {
             { new: true, runValidators: true }
         ).select("-__v");
 
+        await deleteCache(`restaurants:menu:${restaurantId}`);
+        await deleteCache(`restaurants:detail:${restaurantId}`);
+
         if (!updatedItem) {
             return res.status(404).json({
                 success: false,
@@ -313,6 +322,10 @@ const deleteMenuItem = async (req, res) => {
             _id: itemId,
             restaurant: restaurantId,
         });
+
+        await deleteCache(`restaurants:menu:${restaurantId}`);
+        await deleteCache(`restaurants:categories:${restaurantId}`);
+        await deleteCache(`restaurants:detail:${restaurantId}`);
 
         if (!deletedItem) {
             return res.status(404).json({
@@ -364,6 +377,9 @@ const toggleMenuItemAvailability = async (req, res) => {
 
         menuItem.isAvailable = !menuItem.isAvailable;
         await menuItem.save({ validateBeforeSave: false });
+
+        await deleteCache(`restaurants:menu:${restaurantId}`);
+        await deleteCache(`restaurants:detail:${restaurantId}`);
 
         res.status(200).json({
             success: true,

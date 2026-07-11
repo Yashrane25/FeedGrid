@@ -1,5 +1,25 @@
 const Restaurant = require("../models/Restaurant");
 const MenuItem = require("../models/MenuItem");
+const {
+    getCache,
+    setCache,
+    deleteCache,
+    deleteCachePattern,
+} = require("../config/redis");
+
+//Centralized cache key naming
+const CACHE_KEYS = {
+    restaurantList: (query) => `restaurants:list:${JSON.stringify(query)}`,
+    restaurantDetail: (id) => `restaurants:detail:${id}`,
+    restaurantMenu: (id) => `restaurants:menu:${id}`,
+    restaurantCategories: (id) => `restaurants:categories:${id}`,
+};
+
+const TTL = {
+    list: 5 * 60,
+    detail: 10 * 60,
+    menu: 10 * 60,
+};
 
 const createRestaurant = async (req, res) => {
     try {
@@ -17,34 +37,32 @@ const createRestaurant = async (req, res) => {
             deliveryFee,
         } = req.body;
 
-        //Validate required fields
         if (!name || !cuisineType || !address || !phone) {
             return res.status(400).json({
                 success: false,
-                message: "Please provide name, cuisineType, address and phone",
+                message:
+                    "Please provide name, cuisineType, address, and phone",
             });
         }
 
-        //Validate address fields
         if (!address.street || !address.city || !address.state || !address.pincode) {
             return res.status(400).json({
                 success: false,
-                message: "Please provide complete address: street, city, state, pincode",
+                message:
+                    "Please provide complete address: street, city, state, pincode",
             });
         }
 
-        //Validate cuisineType is an array
         if (!Array.isArray(cuisineType) || cuisineType.length === 0) {
             return res.status(400).json({
                 success: false,
-                message: "cuisineType must be a non empty array of strings",
+                message: "cuisineType must be a non-empty array of strings",
             });
         }
 
-        //Check if owner already has a restaurant with same name
         const existingRestaurant = await Restaurant.findOne({
             owner: req.user._id,
-            name: { $regex: new RegExp(`^${name}$`, "i") }, //case insensitive match
+            name: { $regex: new RegExp(`^${name}$`, "i") },
         });
 
         if (existingRestaurant) {
@@ -54,7 +72,6 @@ const createRestaurant = async (req, res) => {
             });
         }
 
-        //Build the restaurant object
         const restaurantData = {
             owner: req.user._id,
             name: name.trim(),
@@ -70,23 +87,22 @@ const createRestaurant = async (req, res) => {
             email: email?.toLowerCase().trim() || null,
         };
 
-        //Add optional fields if provided
         if (openingHours) {
             restaurantData.openingHours = openingHours;
         }
+
         if (deliveryTime !== undefined) {
             restaurantData.deliveryTime = deliveryTime;
         }
+
         if (minimumOrder !== undefined) {
             restaurantData.minimumOrder = minimumOrder;
         }
+
         if (deliveryFee !== undefined) {
             restaurantData.deliveryFee = deliveryFee;
         }
 
-        //Handle location coordinates
-        //location should be { longitude, latitude } from the request
-        //convert to GeoJSON format: { type: "Point", coordinates: [lng, lat] }
         if (location && location.longitude && location.latitude) {
             restaurantData.location = {
                 type: "Point",
@@ -97,18 +113,18 @@ const createRestaurant = async (req, res) => {
             };
         }
 
-        //Create the restaurant
         const restaurant = await Restaurant.create(restaurantData);
-
+        await deleteCachePattern("restaurants:list:*");
         res.status(201).json({
             success: true,
-            message:
-                "Restaurant created successfully. Awaiting admin approval before it appears to customers.",
+            message: "Restaurant created successfully. Awaiting admin approval before it appears to customers.",
             restaurant,
         });
     } catch (error) {
         if (error.name === "ValidationError") {
-            const messages = Object.values(error.errors).map((e) => e.message);
+            const messages = Object.values(error.errors).map(
+                (e) => e.message
+            );
             return res.status(400).json({
                 success: false,
                 message: messages.join(", "),
@@ -122,9 +138,15 @@ const createRestaurant = async (req, res) => {
     }
 };
 
-//GET ALL APPROVED RESTAURANTS (Browse)
 const getAllRestaurants = async (req, res) => {
     try {
+        const cacheKey = CACHE_KEYS.restaurantList(req.query);
+        const cached = await getCache(cacheKey);
+
+        if (cached) {
+            return res.status(200).json({ ...cached, fromCache: true });
+        }
+
         const {
             city,
             cuisine,
@@ -135,50 +157,45 @@ const getAllRestaurants = async (req, res) => {
             sort = "createdAt",
         } = req.query;
 
-        //Build the filter object
         const filter = {
             isApproved: true,
             isActive: true,
         };
 
-        //Add city filter if provided
         if (city) {
             filter["address.city"] = { $regex: city, $options: "i" };
         }
 
-        //Add cuisine filter if provided
         if (cuisine) {
             filter.cuisineType = { $regex: cuisine, $options: "i" };
         }
 
-        //Add open/closed filter if provided
         if (isOpen !== undefined) {
             filter.isOpen = isOpen === "true";
         }
 
-        //Add text search if provided
         if (search) {
             filter.$text = { $search: search };
         }
 
-        //Pagination calculations
         const pageNum = parseInt(page);
         const limitNum = parseInt(limit);
         const skip = (pageNum - 1) * limitNum;
-
-        //Build sort object
         let sortObj = {};
+
         if (sort === "rating") {
-            sortObj = { averageRating: -1 }; //-1 = descending (highest first)
-        } else if (sort === "deliveryTime") {
-            sortObj = { deliveryTime: 1 }; //1 = ascending (fastest first)
-        } else if (sort === "deliveryFee") {
+            sortObj = { averageRating: -1 };
+        }
+        else if (sort === "deliveryTime") {
+            sortObj = { deliveryTime: 1 };
+        }
+        else if (sort === "deliveryFee") {
             sortObj = { deliveryFee: 1 };
-        } else {
-            sortObj = { createdAt: -1 }; //Newest first by default
+        }
+        else {
+            sortObj = { createdAt: -1 };
         }
 
-        //Execute queries
         const [total, restaurants] = await Promise.all([
             Restaurant.countDocuments(filter),
             Restaurant.find(filter)
@@ -189,15 +206,20 @@ const getAllRestaurants = async (req, res) => {
                 .limit(limitNum),
         ]);
 
-        res.status(200).json({
+        const responseData = {
             success: true,
             count: restaurants.length,
             total,
             totalPages: Math.ceil(total / limitNum),
             currentPage: pageNum,
             restaurants,
-        });
-    } catch (error) {
+        };
+
+        //Cache the response
+        await setCache(cacheKey, responseData, TTL.list);
+        res.status(200).json(responseData);
+    }
+    catch (error) {
         console.error("Get restaurants error:", error);
         res.status(500).json({
             success: false,
@@ -206,9 +228,15 @@ const getAllRestaurants = async (req, res) => {
     }
 };
 
-//GET SINGLE RESTAURANT
+//get single restaurent
 const getRestaurantById = async (req, res) => {
     try {
+        const cacheKey = CACHE_KEYS.restaurantDetail(req.params.id);
+        const cached = await getCache(cacheKey);
+        if (cached) {
+            return res.status(200).json({ ...cached, fromCache: true });
+        }
+
         const restaurant = await Restaurant.findById(req.params.id)
             .populate("owner", "name email phone")
             .select("-__v");
@@ -221,8 +249,7 @@ const getRestaurantById = async (req, res) => {
         }
 
         if (!restaurant.isApproved || !restaurant.isActive) {
-            const isOwner =
-                req.user && restaurant.owner._id.toString() === req.user._id.toString();
+            const isOwner = req.user && restaurant.owner._id.toString() === req.user._id.toString();
             const isAdmin = req.user && req.user.role === "admin";
 
             if (!isOwner && !isAdmin) {
@@ -247,14 +274,17 @@ const getRestaurantById = async (req, res) => {
             return acc;
         }, {});
 
-        res.status(200).json({
+        const responseData = {
             success: true,
             restaurant,
             menu: menuByCategory,
             totalMenuItems: menuItems.length,
-        });
+        };
+
+        await setCache(cacheKey, responseData, TTL.detail);
+
+        res.status(200).json(responseData);
     } catch (error) {
-        //Handle invalid MongoDB ObjectId format
         if (error.name === "CastError") {
             return res.status(400).json({
                 success: false,
@@ -269,10 +299,11 @@ const getRestaurantById = async (req, res) => {
     }
 };
 
-//GET OWNERS OWN RESTAURANTS
 const getMyRestaurants = async (req, res) => {
     try {
-        const restaurants = await Restaurant.find({ owner: req.user._id })
+        const restaurants = await Restaurant.find({
+            owner: req.user._id,
+        })
             .select("-__v")
             .sort({ createdAt: -1 });
 
@@ -281,7 +312,8 @@ const getMyRestaurants = async (req, res) => {
             count: restaurants.length,
             restaurants,
         });
-    } catch (error) {
+    }
+    catch (error) {
         console.error("Get my restaurants error:", error);
         res.status(500).json({
             success: false,
@@ -290,7 +322,6 @@ const getMyRestaurants = async (req, res) => {
     }
 };
 
-//UPDATE RESTAURANT 
 const updateRestaurant = async (req, res) => {
     try {
         const restaurant = await Restaurant.findById(req.params.id);
@@ -302,20 +333,28 @@ const updateRestaurant = async (req, res) => {
             });
         }
 
-        //Authorization check
-        if (restaurant.owner.toString() !== req.user._id.toString()) {
+        if (
+            restaurant.owner.toString() !== req.user._id.toString()
+        ) {
             return res.status(403).json({
                 success: false,
                 message: "You are not authorized to update this restaurant",
             });
         }
 
-        //Fields that owners are NOT allowed to change
-        const protectedFields = ["owner", "isApproved", "averageRating", "totalRatings"];
+        const protectedFields = [
+            "owner",
+            "isApproved",
+            "averageRating",
+            "totalRatings",
+        ];
         protectedFields.forEach((field) => delete req.body[field]);
 
-        //Handle location update
-        if (req.body.location && req.body.location.longitude && req.body.location.latitude) {
+        if (
+            req.body.location &&
+            req.body.location.longitude &&
+            req.body.location.latitude
+        ) {
             req.body.location = {
                 type: "Point",
                 coordinates: [
@@ -325,32 +364,42 @@ const updateRestaurant = async (req, res) => {
             };
         }
 
-        //Update the restaurant
         const updatedRestaurant = await Restaurant.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true, runValidators: true }
         ).select("-__v");
 
+        //Invalidate this restaurants cache entries
+        await deleteCache(CACHE_KEYS.restaurantDetail(req.params.id));
+        await deleteCachePattern("restaurants:list:*");
+
         res.status(200).json({
             success: true,
             message: "Restaurant updated successfully",
             restaurant: updatedRestaurant,
         });
-    } catch (error) {
+    }
+    catch (error) {
         if (error.name === "ValidationError") {
-            const messages = Object.values(error.errors).map((e) => e.message);
+            const messages = Object.values(error.errors).map(
+                (e) => e.message
+            );
             return res.status(400).json({ success: false, message: messages.join(", ") });
         }
         if (error.name === "CastError") {
-            return res.status(400).json({ success: false, message: "Invalid restaurant ID" });
+            return res
+                .status(400)
+                .json({ success: false, message: "Invalid restaurant ID" });
         }
         console.error("Update restaurant error:", error);
-        res.status(500).json({ success: false, message: "Server error while updating restaurant" });
+        res.status(500).json({
+            success: false,
+            message: "Server error while updating restaurant",
+        });
     }
 };
 
-//DELETE RESTAURANT
 const deleteRestaurant = async (req, res) => {
     try {
         const restaurant = await Restaurant.findById(req.params.id);
@@ -362,33 +411,40 @@ const deleteRestaurant = async (req, res) => {
             });
         }
 
-        if (restaurant.owner.toString() !== req.user._id.toString()) {
+        if (
+            restaurant.owner.toString() !== req.user._id.toString()
+        ) {
             return res.status(403).json({
                 success: false,
                 message: "You are not authorized to delete this restaurant",
             });
         }
 
-        //Delete all menu items belonging to this restaurant first
         await MenuItem.deleteMany({ restaurant: req.params.id });
-
-        //Delete the restaurant
         await Restaurant.findByIdAndDelete(req.params.id);
+
+        await deleteCache(CACHE_KEYS.restaurantDetail(req.params.id));
+        await deleteCache(CACHE_KEYS.restaurantMenu(req.params.id));
+        await deleteCachePattern("restaurants:list:*");
 
         res.status(200).json({
             success: true,
-            message: "Restaurant and all its menu items deleted successfully",
+            message:
+                "Restaurant and all its menu items deleted successfully",
         });
-    } catch (error) {
+    }
+    catch (error) {
         if (error.name === "CastError") {
             return res.status(400).json({ success: false, message: "Invalid restaurant ID" });
         }
         console.error("Delete restaurant error:", error);
-        res.status(500).json({ success: false, message: "Server error while deleting restaurant" });
+        res.status(500).json({
+            success: false,
+            message: "Server error while deleting restaurant",
+        });
     }
 };
 
-//APPROVE RESTAURANT
 const approveRestaurant = async (req, res) => {
     try {
         const restaurant = await Restaurant.findById(req.params.id);
@@ -403,22 +459,32 @@ const approveRestaurant = async (req, res) => {
         restaurant.isApproved = !restaurant.isApproved;
         await restaurant.save({ validateBeforeSave: false });
 
+        await deleteCache(CACHE_KEYS.restaurantDetail(req.params.id));
+        await deleteCachePattern("restaurants:list:*");
+
         res.status(200).json({
             success: true,
-            message: `Restaurant ${restaurant.isApproved ? "approved" : "unapproved"} successfully`,
+            message: `Restaurant ${restaurant.isApproved ? "approved" : "unapproved"
+                } successfully`,
             isApproved: restaurant.isApproved,
             restaurant,
         });
-    } catch (error) {
+    }
+    catch (error) {
         if (error.name === "CastError") {
-            return res.status(400).json({ success: false, message: "Invalid restaurant ID" });
+            return res
+                .status(400)
+                .json({ success: false, message: "Invalid restaurant ID" });
         }
         console.error("Approve restaurant error:", error);
-        res.status(500).json({ success: false, message: "Server error while approving restaurant" });
+        res.status(500).json({
+            success: false,
+            message: "Server error while approving restaurant",
+        });
     }
 };
 
-//TOGGLE OPEN/CLOSED
+//toggle open/closed
 const toggleRestaurantStatus = async (req, res) => {
     try {
         const restaurant = await Restaurant.findById(req.params.id);
@@ -430,7 +496,6 @@ const toggleRestaurantStatus = async (req, res) => {
             });
         }
 
-        // Authorization check
         if (restaurant.owner.toString() !== req.user._id.toString()) {
             return res.status(403).json({
                 success: false,
@@ -441,29 +506,34 @@ const toggleRestaurantStatus = async (req, res) => {
         restaurant.isOpen = !restaurant.isOpen;
         await restaurant.save({ validateBeforeSave: false });
 
+        await deleteCache(CACHE_KEYS.restaurantDetail(req.params.id));
+        await deleteCachePattern("restaurants:list:*");
+
         res.status(200).json({
             success: true,
-            message: `Restaurant is now ${restaurant.isOpen ? "open" : "closed"}`,
+            message: `Restaurant is now ${restaurant.isOpen ? "open" : "closed"
+                }`,
             isOpen: restaurant.isOpen,
         });
-    } catch (error) {
+    }
+    catch (error) {
         if (error.name === "CastError") {
-            return res.status(400).json({ success: false, message: "Invalid restaurant ID" });
+            return res
+                .status(400)
+                .json({ success: false, message: "Invalid restaurant ID" });
         }
         console.error("Toggle restaurant error:", error);
-        res.status(500).json({ success: false, message: "Server error while toggling status" });
+        res.status(500).json({
+            success: false,
+            message: "Server error while toggling status",
+        });
     }
 };
-
-
-
-
-
-
 
 const getRestaurantReviews = async (req, res) => {
     try {
         const Order = require("../models/Order");
+        const mongoose = require("mongoose");
 
         const { page = 1, limit = 10 } = req.query;
         const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -485,14 +555,10 @@ const getRestaurantReviews = async (req, res) => {
             "rating.score": { $exists: true, $ne: null },
         });
 
-        //Rating distribution
         const distribution = await Order.aggregate([
             {
                 $match: {
-                    restaurant:
-                        require("mongoose").Types.ObjectId.createFromHexString(
-                            req.params.id
-                        ),
+                    restaurant: new mongoose.Types.ObjectId(req.params.id),
                     status: "delivered",
                     "rating.score": { $exists: true, $ne: null },
                 },
@@ -514,7 +580,8 @@ const getRestaurantReviews = async (req, res) => {
             reviews,
             distribution,
         });
-    } catch (error) {
+    }
+    catch (error) {
         if (error.name === "CastError") {
             return res.status(400).json({
                 success: false,
