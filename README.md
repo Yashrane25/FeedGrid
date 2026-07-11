@@ -110,44 +110,42 @@ FeedGrid uses **Redis** as an in memory caching layer between the Express server
 
 ## How it works
 
-
-```
-                                                                         ┌─────────────────┐
-                                                                         │    Customer     │
-                                                                         │opens/restaurants│
-                                                                         └────────┬────────┘
-                                                                                  │
-                                                                         ┌────────▼────────┐
-                                                                         │  Express Server │
-                                                                         └────────┬────────┘
-                                                                                  │
-                                                                   ┌──────────────▼──────────────┐
-                                                                   │     Check Redis first       │
-                                                                   └──────────┬──────────────────┘
-                                                                              │       
-                                                                 ┌────────────▼────────────┐
-                                                                 │   Key exists in Redis?  │
-                                                                 └────────────┬────────────┘
-                                                                              │
-                                                               ┌──────────────┴──────────────┐
-                                                               │ YES (Cache HIT)             │ NO (Cache MISS)
-                                                               │                             │
-                                                         ┌─────▼──────┐              ┌───────▼───────┐
-                                                         │ Return     │              │ Query MongoDB │
-                                                         │ instantly  │              │ (slower)      │
-                                                         │ 2ms        │              └───────┬───────┘
-                                                         └────────────┘                      │
-                                                                                     ┌───────▼───────┐
-                                                                                     │ Store result  │
-                                                                                     │ in Redis      │
-                                                                                     │ (TTL: 5 min)  │
-                                                                                     └───────┬───────┘
-                                                                                             │
-                                                                                     ┌───────▼───────┐
-                                                                                     │ Return to     │
-                                                                                     │ customer      │
-                                                                                     │ 300ms         │
-                                                                                     └───────────────┘
+```text
+                         ┌─────────────────────┐
+                         │      Customer       │
+                         │ opens /restaurants  │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │   Express Server    │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │   Check Redis Cache │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │  Cache Key Exists?  │
+                         └──────────┬──────────┘
+                                    │
+                  ┌─────────────────┴─────────────────┐
+                  │                                   │
+              Cache HIT                          Cache MISS 
+                  │                                   │
+        ┌─────────▼─────────┐              ┌──────────▼──────────┐
+        │ Return Cached     │              │ Query MongoDB Atlas │
+        │ Response (~2 ms)  │              │ (Database Read)     │
+        └───────────────────┘              └──────────┬──────────┘
+                                                      │
+                                           ┌──────────▼──────────┐
+                                           │ Store in Redis      │
+                                           │ TTL: 5 Minutes      │
+                                           └──────────┬──────────┘
+                                                      │
+                                           ┌──────────▼──────────┐
+                                           │ Return Response     │
+                                           │ (~300 ms)           │
+                                           └─────────────────────┘
 ```
 
 ## Cached Data
