@@ -5,20 +5,21 @@
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=flat-square&logo=nodedotjs)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb)](https://www.mongodb.com/)
+[![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=flat-square&logo=redis)](https://redis.io/)
 [![Socket.io](https://img.shields.io/badge/Socket.io-Real--Time-010101?style=flat-square&logo=socketdotio)](https://socket.io/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat-square&logo=stripe)](https://stripe.com/)
 
 **A production ready food delivery platform.**
 
-Real time order tracking · Stripe payments · Live GPS map · Role-based dashboards
+Real time order tracking · Redis caching · Stripe payments · Live GPS map · Role based dashboards
 
 </div>
 
 ---
 
-FeedGrid is a full stack food delivery platform built from scratch. It supports three distinct user roles with dedicated dashboards, real time order management via Socket.io, live delivery tracking on a Leaflet.js map and secure Stripe payment processing.
+FeedGrid is a full stack food delivery platform built from scratch. It supports three distinct user roles with dedicated dashboards, real time order management via Socket.io, live delivery tracking on a Leaflet.js map and secure Stripe payment processing and a Redis caching layer that improves API performance by reducing repeated database queries.
 
-This project was built to demonstrate production level engineering practices including JWT refresh token rotation, server side payment verification, MongoDB aggregation pipelines, WebSocket room based broadcasting.
+This project was built to demonstrate production level engineering practices including JWT refresh token rotation, server side payment verification,  Redis caching, MongoDB aggregation pipelines, API rate limiting to mitigate brute force attacks, WebSocket room based broadcasting.
 
 ---
 
@@ -111,42 +112,42 @@ FeedGrid uses **Redis** as an in memory caching layer between the Express server
 
 
 ```
-                    ┌─────────────────┐
-                    │    Customer     │
-                    │opens/restaurants│
-                    └────────┬────────┘
-                             │
-                    ┌────────▼────────┐
-                    │  Express Server │
-                    └────────┬────────┘
-                             │
-              ┌──────────────▼──────────────┐
-              │     Check Redis first       │
-              └──────────┬──────────────────┘
-                         │
-            ┌────────────▼────────────┐
-            │   Key exists in Redis?  │
-            └────────────┬────────────┘
-                         │
-          ┌──────────────┴──────────────┐
-          │ YES (Cache HIT)             │ NO (Cache MISS)
-          │                             │
-    ┌─────▼──────┐              ┌───────▼───────┐
-    │ Return     │              │ Query MongoDB │
-    │ instantly  │              │ (slower)      │
-    │ 2ms        │              └───────┬───────┘
-    └────────────┘                      │
-                                ┌───────▼───────┐
-                                │ Store result  │
-                                │ in Redis      │
-                                │ (TTL: 5 min)  │
-                                └───────┬───────┘
-                                        │
-                                ┌───────▼───────┐
-                                │ Return to     │
-                                │ customer      │
-                                │ 300ms         │
-                                └───────────────┘
+                                                                         ┌─────────────────┐
+                                                                         │    Customer     │
+                                                                         │opens/restaurants│
+                                                                         └────────┬────────┘
+                                                                                  │
+                                                                         ┌────────▼────────┐
+                                                                         │  Express Server │
+                                                                         └────────┬────────┘
+                                                                                  │
+                                                                   ┌──────────────▼──────────────┐
+                                                                   │     Check Redis first       │
+                                                                   └──────────┬──────────────────┘
+                                                                              │       
+                                                                 ┌────────────▼────────────┐
+                                                                 │   Key exists in Redis?  │
+                                                                 └────────────┬────────────┘
+                                                                              │
+                                                               ┌──────────────┴──────────────┐
+                                                               │ YES (Cache HIT)             │ NO (Cache MISS)
+                                                               │                             │
+                                                         ┌─────▼──────┐              ┌───────▼───────┐
+                                                         │ Return     │              │ Query MongoDB │
+                                                         │ instantly  │              │ (slower)      │
+                                                         │ 2ms        │              └───────┬───────┘
+                                                         └────────────┘                      │
+                                                                                     ┌───────▼───────┐
+                                                                                     │ Store result  │
+                                                                                     │ in Redis      │
+                                                                                     │ (TTL: 5 min)  │
+                                                                                     └───────┬───────┘
+                                                                                             │
+                                                                                     ┌───────▼───────┐
+                                                                                     │ Return to     │
+                                                                                     │ customer      │
+                                                                                     │ 300ms         │
+                                                                                     └───────────────┘
 ```
 
 ## Cached Data
