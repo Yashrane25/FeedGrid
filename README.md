@@ -8,7 +8,7 @@
 [![Socket.io](https://img.shields.io/badge/Socket.io-Real--Time-010101?style=flat-square&logo=socketdotio)](https://socket.io/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat-square&logo=stripe)](https://stripe.com/)
 
-**A production-ready food delivery platform built with the MERN stack.**
+**A production ready food delivery platform.**
 
 Real time order tracking · Stripe payments · Live GPS map · Role-based dashboards
 
