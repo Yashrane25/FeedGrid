@@ -17,14 +17,13 @@ const authLimiter = rateLimit({
     skipSuccessfulRequests: false,
 });
 
-//for normal API usage 100 requests per 10 minutes per IP
+//for normal API usage 1000 requests per 10 minutes per IP
 const apiLimiter = rateLimit({
-    windowMs: 10 * 60 * 1000, //10min
-    max: 100,
+    windowMs: 15 * 60 * 1000, //15min
+    max: 1000,
     message: {
         success: false,
-        message:
-            "Too many requests from this IP. Please try again later.",
+        message: "Too many requests from this IP. Please try again later.",
     },
     standardHeaders: true,
     legacyHeaders: false,
@@ -33,11 +32,10 @@ const apiLimiter = rateLimit({
 //5 requests per 10 minutes per IP
 const paymentLimiter = rateLimit({
     windowMs: 10 * 60 * 1000,
-    max: 5,
+    max: 10,
     message: {
         success: false,
-        message:
-            "Too many payment attempts. Please try again in 10 minutes.",
+        message: "Too many payment attempts. Please try again in 10 minutes.",
     },
     standardHeaders: true,
     legacyHeaders: false,
