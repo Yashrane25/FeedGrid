@@ -224,8 +224,8 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
 ### Step 1 - Clone the repository
 
 ```bash
-git clone https://github.com/Yashrane25/feedgrid.git
-cd feedgrid
+git clone https://github.com/Yashrane25/FeedGrid.git
+cd FeedGrid
 ```
 
 ### Step 2 - Install backend dependencies
