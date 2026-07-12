@@ -8,18 +8,19 @@
 [![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=flat-square&logo=redis)](https://redis.io/)
 [![Socket.io](https://img.shields.io/badge/Socket.io-Real--Time-010101?style=flat-square&logo=socketdotio)](https://socket.io/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF?style=flat-square&logo=stripe)](https://stripe.com/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-Image%20Storage-3448C5?style=flat-square&logo=cloudinary)](https://cloudinary.com/)
 
 **A production ready food delivery platform.**
 
-Real time order tracking · Redis caching · Stripe payments · Live GPS map · Role based dashboards
+Real time order tracking · Redis caching · Cloudinary image storage · Stripe payments · Live GPS map · Role based dashboards
 
 </div>
 
 ---
 
-FeedGrid is a full stack food delivery platform built from scratch. It supports three distinct user roles with dedicated dashboards, real time order management via Socket.io, live delivery tracking on a Leaflet.js map and secure Stripe payment processing and a Redis caching layer that improves API performance by reducing repeated database queries.
+FeedGrid is a full stack food delivery platform built from scratch. It supports three distinct user roles with dedicated dashboards, real time order management via Socket.io, live delivery tracking on a Leaflet.js map and secure Stripe payment processing, Cloudinary powered image management for restaurants and menu items and a Redis caching layer that improves API performance by reducing repeated database queries.
 
-This project was built to demonstrate production level engineering practices including JWT refresh token rotation, server side payment verification,  Redis caching, MongoDB aggregation pipelines, API rate limiting to mitigate brute force attacks, WebSocket room based broadcasting.
+This project was built to demonstrate production level engineering practices including JWT refresh token rotation, server side payment verification, Cloudinary image streaming, Redis caching, MongoDB aggregation pipelines, API rate limiting to mitigate brute force attacks, WebSocket room based broadcasting.
 
 ---
 
@@ -39,6 +40,8 @@ This project was built to demonstrate production level engineering practices inc
 ### Restaurant Owner
 - Register and manage multiple restaurants
 - Create, edit and manage menu items with categories
+- Upload and manage restaurant gallery images
+- Upload, replace and delete menu item images
 - Toggle restaurant open/closed status
 - Receive instant order notifications (Socket.io)
 - Manage incoming orders through 6 stage workflow
@@ -84,6 +87,7 @@ This project was built to demonstrate production level engineering practices inc
 | bcryptjs | Password hashing |
 | cookie-parser | HttpOnly refresh token cookies |
 | Stripe SDK | Payment intent creation |
+| Cloudinary SDK | Cloud image storage and CDN delivery |
 | Helmet.js | Security HTTP headers |
 | express-rate-limit | Request rate limiting |
 | express-mongo-sanitize | NoSQL injection prevention |
@@ -93,6 +97,7 @@ This project was built to demonstrate production level engineering practices inc
 | Service | Purpose |
 |---|---|
 | MongoDB Atlas | Primary database (free tier) |
+| Cloudinary | Image storage |
 | Stripe Test Mode | Payment processing |
 | OpenStreetMap + Nominatim | Free map tiles and geocoding |
 
@@ -193,6 +198,26 @@ If you want to enable caching locally:
 
 ---
 
+---
+
+# Cloudinary Image Management
+
+FeedGrid uses **Cloudinary** for storing, optimizing and delivering restaurant and menu item images.
+
+### Features
+
+- Secure cloud-based image storage
+- Automatic image optimization (`quality=auto`)
+- Automatic format selection (`fetch_format=auto`)
+- Memory-based uploads using Multer (`memoryStorage`)
+- Direct streaming to Cloudinary using `upload_stream()`
+- Restaurant gallery supporting up to 5 images
+- Menu item image upload, replacement, and deletion
+- Automatic cleanup of partially uploaded images if a batch upload fails
+- CDN-backed image delivery for faster page loads
+
+---
+
 ## API Documentation
 
 ### Authentication
@@ -262,6 +287,7 @@ Make sure you have the following installed on your machine:
 
 You will also need free accounts on:
 - [MongoDB Atlas](https://www.mongodb.com/atlas) - free M0 cluster (required)
+- Cloudinary - image hosting and CDN (required)
 - [Stripe](https://stripe.com/) - test mode keys (required)
 - [Redis Cloud](https://redis.io/try-free/) - free 30MB instance (optional - app works without it)
 
@@ -296,6 +322,11 @@ STRIPE_WEBHOOK_SECRET=whsec_placeholder
 
 # Redis - get from Redis Cloud free tier (optional - app works without it)
 REDIS_URL=redis://default:password@your-redis-host:port
+
+# Cloudinary - get from https://console.cloudinary.com/
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 
 ```
 
@@ -344,11 +375,15 @@ Create a free MongoDB Atlas cluster, configure a database user and network acces
 
 Create a Stripe account in **Test Mode**, copy your **Secret Key** to `backend/.env` and **Publishable Key** to `frontend/.env`.
 
-### Step 6 - Create an Admin Account
+### Step 6 - Set up Cloudinary
+
+Create a free Cloudinary account, copy your **Cloud Name**, **API Key**, and **API Secret**, then add them to `backend/.env`.
+
+### Step 7 - Create an Admin Account
 
 Register a new user, then update its `role` to `admin` in the MongoDB `users` collection. Log in again to access the admin dashboard.
 
-### Step 7 - Start the Development Servers
+### Step 8 - Start the Development Servers
 
 Run the backend and frontend in separate terminal windows:
 
