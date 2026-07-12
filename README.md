@@ -198,8 +198,6 @@ If you want to enable caching locally:
 
 ---
 
----
-
 # Cloudinary Image Management
 
 FeedGrid uses **Cloudinary** for storing, optimizing and delivering restaurant and menu item images.
