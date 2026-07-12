@@ -204,15 +204,15 @@ FeedGrid uses **Cloudinary** for storing, optimizing and delivering restaurant a
 
 ### Features
 
-- Secure cloud-based image storage
+- Secure cloud based image storage
 - Automatic image optimization (`quality=auto`)
 - Automatic format selection (`fetch_format=auto`)
-- Memory-based uploads using Multer (`memoryStorage`)
+- Memory based uploads using Multer (`memoryStorage`)
 - Direct streaming to Cloudinary using `upload_stream()`
 - Restaurant gallery supporting up to 5 images
-- Menu item image upload, replacement, and deletion
+- Menu item image upload, replacement and deletion
 - Automatic cleanup of partially uploaded images if a batch upload fails
-- CDN-backed image delivery for faster page loads
+- CDN backed image delivery for faster page loads
 
 ---
 
