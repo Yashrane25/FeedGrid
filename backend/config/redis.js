@@ -63,11 +63,11 @@ const getCache = async (key) => {
         const value = await redisClient.get(key);
 
         if (value) {
-            console.log("Cache HIT:", key);
+            // console.log("Cache HIT:", key);
             return JSON.parse(value);
         }
 
-        console.log("Cache MISS:", key);
+        // console.log("Cache MISS:", key);
         return null;
     }
     catch (error) {

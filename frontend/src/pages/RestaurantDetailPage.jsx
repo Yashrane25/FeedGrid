@@ -5,6 +5,7 @@ import MenuItemCard from "../components/MenuItemCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import ClearCartDialog from "../components/ClearCartDialog";
+import ImageCarousel from "../components/ImageCarousel";
 import { useCart } from "../context/CartContext";
 import ReviewsSection from "../components/ReviewsSection";
 import "./RestaurantDetailPage.css";
@@ -136,15 +137,12 @@ const RestaurantDetailPage = () => {
         ← Back
       </button>
 
-      {restaurant.images && restaurant.images.length > 0 ? (
-        <img
-          src={restaurant.images[0]}
-          alt={restaurant.name}
-          className="restaurant-detail-page__hero-image"
-        />
-      ) : (
-        <div className="restaurant-detail-page__hero-placeholder">🍽️</div>
-      )}
+      <ImageCarousel
+        images={restaurant.images || []}
+        alt={restaurant.name}
+        autoPlay={true}
+        autoPlayDelay={4000}
+      />
 
       <div className="restaurant-detail-page__info-section">
         <div className="restaurant-detail-page__name-row">

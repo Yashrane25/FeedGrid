@@ -4,6 +4,7 @@ import API from "../../api/axios";
 import RestaurantForm from "../../components/RestaurantForm";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ErrorMessage from "../../components/ErrorMessage";
+import ImageUpload from "../../components/ImageUpload";
 import "./ManageRestaurantPage.css";
 
 const ManageRestaurantPage = () => {
@@ -21,6 +22,11 @@ const ManageRestaurantPage = () => {
   );
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [selectedImageFiles, setSelectedImageFiles] = useState([]);
+  const [imageUploadSuccess, setImageUploadSuccess] = useState(null);
+  const [menuItemImageFile, setMenuItemImageFile] = useState(null);
 
   const [menuForm, setMenuForm] = useState({
     name: "",
@@ -85,6 +91,7 @@ const ManageRestaurantPage = () => {
   const openMenuForm = (item = null) => {
     if (item) {
       setEditingItem(item);
+      setMenuItemImageFile(null);
 
       setMenuForm({
         name: item.name,
@@ -100,6 +107,7 @@ const ManageRestaurantPage = () => {
       });
     } else {
       setEditingItem(null);
+      setMenuItemImageFile(null);
 
       setMenuForm({
         name: "",
@@ -121,7 +129,6 @@ const ManageRestaurantPage = () => {
 
   const handleSaveMenuItem = async (e) => {
     e.preventDefault();
-
     setMenuFormError(null);
 
     if (!menuForm.name.trim() || !menuForm.price || !menuForm.category.trim()) {
@@ -134,37 +141,55 @@ const ManageRestaurantPage = () => {
       price: Number(menuForm.price),
       category: menuForm.category.trim(),
       isVegetarian: menuForm.isVegetarian,
-      isNonVeg: menuForm.isNonVeg,
       isVegan: menuForm.isVegan,
       preparationTime: Number(menuForm.preparationTime),
       spiceLevel: menuForm.spiceLevel || null,
       tags: menuForm.tags
         ? menuForm.tags
             .split(",")
-            .map((tag) => tag.trim())
+            .map((t) => t.trim())
             .filter(Boolean)
         : [],
     };
 
     setIsSavingMenu(true);
-
     try {
+      let savedItem;
+
       if (editingItem) {
-        await API.put(
+        const res = await API.put(
           `/restaurants/${restaurantId}/menu/${editingItem._id}`,
           payload,
         );
+        savedItem = res.data.menuItem;
       } else {
-        await API.post(`/restaurants/${restaurantId}/menu`, payload);
+        const res = await API.post(
+          `/restaurants/${restaurantId}/menu`,
+          payload,
+        );
+        savedItem = res.data.menuItem;
       }
 
+      // If a new image was selected, upload it now
+      if (menuItemImageFile && savedItem._id) {
+        const formData = new FormData();
+        formData.append("image", menuItemImageFile);
+
+        await API.post(
+          `/restaurants/${restaurantId}/menu/${savedItem._id}/image`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } },
+        );
+      }
+
+      // Refresh menu items list
       const menuRes = await API.get(
         `/restaurants/${restaurantId}/menu?available=all`,
       );
-
       setMenuItems(menuRes.data.menuItems || []);
       setShowMenuForm(false);
       setEditingItem(null);
+      setMenuItemImageFile(null);
     } catch (err) {
       setMenuFormError(
         err.response?.data?.message || "Failed to save menu item",
@@ -210,6 +235,61 @@ const ManageRestaurantPage = () => {
       setMenuItems((prev) => prev.filter((item) => item._id !== itemId));
     } catch (err) {
       alert(err.response?.data?.message || "Failed to delete item");
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (selectedImageFiles.length === 0) return;
+
+    setIsUploadingImages(true);
+    setImageUploadSuccess(null);
+
+    try {
+      const formData = new FormData();
+      selectedImageFiles.forEach((file) => {
+        formData.append("images", file);
+      });
+
+      const res = await API.post(
+        `/restaurants/${restaurantId}/images`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      setRestaurant((prev) => ({
+        ...prev,
+        images: res.data.images,
+      }));
+
+      setSelectedImageFiles([]);
+      setImageUploadSuccess(`${res.data.images.length} image(s) saved`);
+
+      setTimeout(() => setImageUploadSuccess(null), 3000);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to upload images");
+    } finally {
+      setIsUploadingImages(false);
+    }
+  };
+
+  const handleRemoveImage = async (imageUrl) => {
+    if (!window.confirm("Remove this image?")) return;
+
+    try {
+      const res = await API.delete(`/restaurants/${restaurantId}/images`, {
+        data: { imageUrl },
+      });
+
+      setRestaurant((prev) => ({
+        ...prev,
+        images: res.data.images,
+      }));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to remove image");
     }
   };
 
@@ -273,13 +353,76 @@ const ManageRestaurantPage = () => {
         </button>
       </div>
 
-      {activeTab === "details" && (
+      {/* {activeTab === "details" && (
         <RestaurantForm
           initialData={restaurant}
           onSubmit={handleUpdateRestaurant}
           isLoading={isSaving}
           submitLabel="Save Changes"
         />
+      )} */}
+
+      {activeTab === "details" && (
+        <div>
+          {/* Restaurant Images */}
+          ...
+          <RestaurantForm
+            initialData={restaurant}
+            onSubmit={handleUpdateRestaurant}
+            isLoading={isSaving}
+            submitLabel="Save Changes"
+          />
+        </div>
+      )}
+
+      {activeTab === "details" && (
+        <div>
+          {/* Restaurant Images Section */}
+          <div className="manage-restaurant__image-section">
+            <div className="manage-restaurant__section-title">
+              Restaurant Images
+            </div>
+            <p className="manage-restaurant__section-hint">
+              Upload up to 5 images. The first image is used as the cover photo
+              on the browse page.
+            </p>
+
+            <ImageUpload
+              onFilesSelected={setSelectedImageFiles}
+              maxFiles={5}
+              accept="image/*"
+              isUploading={isUploadingImages}
+              currentImages={restaurant.images || []}
+              onRemoveExisting={handleRemoveImage}
+            />
+
+            {selectedImageFiles.length > 0 && (
+              <button
+                className="manage-restaurant__upload-btn"
+                onClick={handleImageUpload}
+                disabled={isUploadingImages}
+              >
+                {isUploadingImages
+                  ? "Uploading..."
+                  : `Upload ${selectedImageFiles.length} Image(s)`}
+              </button>
+            )}
+
+            {imageUploadSuccess && (
+              <div className="manage-restaurant__upload-success">
+                ✓ {imageUploadSuccess}
+              </div>
+            )}
+          </div>
+
+          {/* Existing restaurant form below */}
+          <RestaurantForm
+            initialData={restaurant}
+            onSubmit={handleUpdateRestaurant}
+            isLoading={isSaving}
+            submitLabel="Save Changes"
+          />
+        </div>
       )}
 
       {activeTab === "menu" && (
@@ -515,6 +658,32 @@ const ManageRestaurantPage = () => {
                     }))
                   }
                   placeholder="e.g. bestseller, recommended"
+                />
+              </div>
+
+              {/* Image upload for menu item */}
+              <div style={{ marginBottom: "0.85rem" }}>
+                <label className="manage-restaurant__menu-image-label">
+                  Item Image
+                </label>
+                {editingItem?.image && !menuItemImageFile && (
+                  <div className="manage-restaurant__current-image">
+                    <img
+                      src={editingItem.image}
+                      alt={editingItem.name}
+                      className="manage-restaurant__current-image-thumb"
+                    />
+                    <span className="manage-restaurant__current-image-label">
+                      Current image
+                    </span>
+                  </div>
+                )}
+                <ImageUpload
+                  onFilesSelected={(files) => setMenuItemImageFile(files[0])}
+                  maxFiles={1}
+                  accept="image/*"
+                  isUploading={isSavingMenu}
+                  currentImages={[]}
                 />
               </div>
 

@@ -18,6 +18,7 @@ const restaurantRoutes = require("./routes/restaurantRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const imageRoutes = require("./routes/imageRoutes");
 
 const app = express();
 
@@ -73,6 +74,7 @@ app.use("/api/payments", paymentLimiter, paymentRoutes);
 app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api", imageRoutes);
 
 //404 HANDLER
 app.use((req, res) => {
